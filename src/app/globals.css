@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
+/* Identidade visual baseada em angelim.org: grafite, verde Angelim e
+   títulos condensados. O vinho entra como toque natalino. */
+@theme {
+  --color-ink: #232325;
+  --color-ink-soft: #313134;
+  --color-paper: #f7f6f2;
+  --color-card: #ffffff;
+  --color-line: #dedbd3;
+  --color-muted: #66666b;
+  --color-brand: #3b7a52;
+  --color-brand-strong: #2b5c3c;
+  --color-brand-soft: #e5efe8;
+  --color-wine: #9b2737;
+  --color-wine-soft: #f6e4e6;
+  --color-amber: #a8650c;
+  --color-amber-soft: #fbf0dc;
+
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas), Impact, "Arial Narrow", sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Remove as setas dos inputs numéricos (usamos botões − / +). */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+dialog::backdrop {
+  background: rgb(20 20 22 / 0.55);
+}
+
+@utility field {
+  @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-base outline-none transition
+    focus:border-brand focus:ring-2 focus:ring-brand/25;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition
+    disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-brand text-white hover:bg-brand-strong;
+}
+@utility btn-outline {
+  @apply btn border border-ink/80 bg-transparent text-ink hover:bg-ink hover:text-white;
+}
+@utility btn-ghost {
+  @apply btn text-ink hover:bg-ink/5;
+}
+@utility btn-danger {
+  @apply btn bg-wine text-white hover:brightness-110;
+}
+@utility card {
+  @apply rounded-2xl border border-line bg-card;
+}
+@utility display {
+  @apply font-display uppercase leading-[0.95] tracking-wide;
 }
