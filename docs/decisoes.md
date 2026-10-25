@@ -59,6 +59,7 @@ Fora da v1 (opcionais): anti-spam com captcha e limite por IP, perfis separados 
 ## Identidade visual
 
 Baseada em angelim.org:
-- Cores: grafite `#232325`, verde `#3b7a52` e vinho `#9b2737` como toque natalino.
+- Cores: grafite `#232325`, verde `#3b7a52` e vinho `#9b2737`.
+- Hero: **fundo grafite** (igual ao site) com neve sutil. O toque natalino é **só no texto**, em vermelho `#e5394e` ("ceia de Natal", rótulos). Fundo vermelho foi testado e descartado por lembrar identidade partidária.
 - Fontes: Bebas Neue nos títulos e Montserrat no texto.
 - Logo provisória em `public/logo-angelim.png`.
