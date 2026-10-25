@@ -68,6 +68,9 @@ const ERRORS: Record<string, string> = {
 
 /** Converte "OVER_LIMIT:14" em { code, itemId, message }. */
 export function parseDbError(message: string | undefined) {
+  if (message?.includes("items_name_key")) {
+    return { code: "DUPLICATE_ITEM", itemId: undefined, message: "Já existe um item com esse nome." };
+  }
   const [code, arg] = (message ?? "").split(":");
   return {
     code,
