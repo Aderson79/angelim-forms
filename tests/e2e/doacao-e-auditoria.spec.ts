@@ -205,6 +205,11 @@ test("o painel exige login", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Área da equipe" }).click();
   await expect(page).toHaveURL(/\/login$/);
+  // e o "Voltar" do login retorna ao formulário
+  await page.getByRole("link", { name: "← Voltar ao formulário" }).click();
+  await expect(page.getByRole("button", { name: "Confirmar doação" })).toBeVisible();
+  await page.getByRole("link", { name: "Área da equipe" }).click();
+  await expect(page).toHaveURL(/\/login$/);
 
   await page.goto("/admin/doacoes");
   await expect(page).toHaveURL(/\/login$/);
