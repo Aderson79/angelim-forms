@@ -82,6 +82,23 @@ test("a logo leva ao site da Missão Angelim em nova aba", async ({ page }) => {
   await expect(logo).toHaveAttribute("target", "_blank");
 });
 
+test("só as informações são selecionáveis, não os textos decorativos", async ({ page }) => {
+  await page.goto("/");
+  const userSelect = (loc: ReturnType<Page["locator"]>) =>
+    loc.evaluate((el) => getComputedStyle(el).userSelect || getComputedStyle(el).webkitUserSelect);
+
+  expect(await userSelect(page.getByRole("heading", { level: 1 }))).toBe("none");
+  expect(await userSelect(page.getByText("Informações sobre as doações"))).toBe("none");
+  // valores vindos do banco: chave PIX e contatos
+  const key = page.getByText("institutovidaabencoada@gmail.com").first();
+  await expect(key).toBeVisible();
+  expect(await userSelect(key)).toBe("text");
+  expect(await userSelect(page.getByText("(86) 9 8800-6865").first())).toBe("text");
+  // campos de digitação continuam funcionando
+  await page.getByLabel("Nome completo").fill("Teste de seleção");
+  await expect(page.getByLabel("Nome completo")).toHaveValue("Teste de seleção");
+});
+
 test("bloqueia a confirmação sem dados e sem itens", async ({ page }) => {
   await page.goto("/");
   const confirm = page.getByRole("button", { name: "Confirmar doação" });
