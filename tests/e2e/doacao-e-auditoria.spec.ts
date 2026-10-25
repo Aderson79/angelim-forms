@@ -201,6 +201,11 @@ test("segunda doação com o mesmo telefone (para o alerta de duplicado)", async
 // ---------------------------------------------------------------- painel / auditoria
 
 test("o painel exige login", async ({ page }) => {
+  // O botão "Área da equipe" da página pública leva ao login
+  await page.goto("/");
+  await page.getByRole("link", { name: "Área da equipe" }).click();
+  await expect(page).toHaveURL(/\/login$/);
+
   await page.goto("/admin/doacoes");
   await expect(page).toHaveURL(/\/login$/);
 
