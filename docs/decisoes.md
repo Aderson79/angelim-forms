@@ -60,8 +60,12 @@ Fora da v1 (opcionais): anti-spam com captcha e limite por IP, perfis separados 
 
 ## Identidade visual
 
-Baseada em angelim.org:
-- Cores: grafite `#232325`, verde `#3b7a52` e vinho `#9b2737`.
-- Hero: **fundo grafite** (igual ao site) com neve sutil. O toque natalino é **só no texto**, em vermelho `#e5394e` ("ceia de Natal", rótulos). Fundo vermelho foi testado e descartado por lembrar identidade partidária.
-- Fontes: Bebas Neue nos títulos e Montserrat no texto.
-- Logo provisória em `public/logo-angelim.png`.
+A página pública segue a arte do **Natal Solidário 2025** (angelim.org), porque a ceia faz parte dessa ação:
+- Fundo **creme** `#f6f4dc`, letreiro **"Ceia de Natal"** em letra cursiva vermelha (Lobster) e a faixa **"• DOAÇÕES •"** em vermelho `#cf2433` com texto branco, como o "SOLIDÁRIO" da arte original.
+- Selo amarelo do ano, estrelas de quatro pontas em dourado e vermelho, e "Lagoa do Piauí" em letra manuscrita (Gochi Hand).
+- Faixa **vinho** `#9a1b31` atrás do topo do formulário; cabeçalhos das categorias e a barra de confirmação em **verde-floresta** `#173a1f`.
+- Cartões e botões com **contorno grafite e sombra sólida deslocada**, como os botões "Faça sua doação" do site.
+- Texto em Montserrat. O cabeçalho usa a logo da Angelim em preto sobre o creme. O rodapé continua grafite, igual ao site.
+- O **painel admin** mantém o visual sóbrio (grafite e verde), sem os elementos natalinos.
+- Histórico: o hero grafite com destaque vermelho neon foi descartado; o fundo vermelho também, por lembrar identidade partidária.
+- Favicon: o círculo da árvore da logo "Igreja Angelim Teresina", só as partes brancas, com fundo e linhas vazados.
