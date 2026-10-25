@@ -40,6 +40,8 @@ Total: 26 itens em 4 categorias (Estrogonofe de frango, Salada, Arroz, Materiais
 - O limite de um item não pode ficar abaixo do que já foi prometido.
 - Cada doação recebe um **protocolo** sequencial (#0001…). Pode haver saltos na numeração, o que é normal no Postgres e não indica perda.
 - O formulário tem um campo "honeypot" invisível contra robôs.
+- **Não dá para confirmar sem dados e sem itens.** O botão "Confirmar doação" fica desabilitado e a barra mostra o que falta preencher. O banco também valida, então não há como burlar.
+- **Resumo ao confirmar:** a pessoa vê o protocolo, seus dados, os itens via PIX com valor e total, a chave PIX, o prazo, os contatos para o comprovante e os itens de entrega física com data, local e horários. Pode copiar o resumo em texto ou imprimir / salvar em PDF.
 
 ## Segurança e acesso
 
