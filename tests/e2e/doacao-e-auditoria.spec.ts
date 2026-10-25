@@ -75,6 +75,13 @@ async function searchDonation(page: Page, protocol: string, status: "ativa" | "t
 
 // ---------------------------------------------------------------- formulário público
 
+test("a logo leva ao site da Missão Angelim em nova aba", async ({ page }) => {
+  await page.goto("/");
+  const logo = page.getByRole("link", { name: /Site da Missão Angelim/ }).first();
+  await expect(logo).toHaveAttribute("href", "https://www.angelim.org");
+  await expect(logo).toHaveAttribute("target", "_blank");
+});
+
 test("bloqueia a confirmação sem dados e sem itens", async ({ page }) => {
   await page.goto("/");
   const confirm = page.getByRole("button", { name: "Confirmar doação" });
