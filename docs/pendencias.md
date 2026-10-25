@@ -16,6 +16,7 @@ O código já existe (`src/lib/email.ts`) e fica desligado enquanto `RESEND_API_
   > **OBS.:** Ao confirmar o preenchimento do formulário será enviada uma cópia para o e-mail cadastrado.
 
 ### Datas, local e horários
+Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 - [ ] Definir as datas finais, o local e os horários de entrega e atualizá-los no painel em **Configurações** (não precisa de deploy).
 - [ ] Opcional: configurar o fechamento automático do formulário por data.
 

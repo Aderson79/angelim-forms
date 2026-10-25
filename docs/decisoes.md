@@ -30,7 +30,7 @@ Total: 26 itens em 4 categorias (Estrogonofe de frango, Salada, Arroz, Materiais
 
 - Textos e contatos seguem os formulários de referência (Google Forms).
 - Contatos: **Janaína (86) 9 8800-6865** e **Carol (86) 9 9814-6020**. Chave PIX: `institutovidaabencoada@gmail.com`.
-- Datas, local e horários de entrega **não ficam no código**. São editáveis em **Configurações** porque ainda serão definidos. Os valores iniciais são os dos prints (14/12/2025, Campus Expedicionários, 08h–12h / 14h–18h).
+- Datas, local e horários de entrega **não ficam no código**. São editáveis em **Configurações** porque ainda serão definidos. Enquanto isso, todos aparecem como **"A definir"**. Os textos usam o formato rótulo + valor ("Prazo: …", "Local: …") para funcionar tanto com "A definir" quanto com o valor real.
 
 ## Regras de negócio
 
