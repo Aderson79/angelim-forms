@@ -45,3 +45,15 @@ npm run dev
 ```
 
 Decisões do projeto e pendências estão em [docs/](docs/).
+
+### 5. Testes ponta a ponta
+
+Adicione ao `.env.local` o login de um admin (`E2E_ADMIN_EMAIL` e `E2E_ADMIN_PASSWORD`) e rode:
+
+```bash
+npm run test:e2e
+```
+
+Os testes sobem um build local ligado ao Supabase **real**: criam doações "[TESTE E2E]", testam o painel e anulam tudo no final.
+Para testar o site publicado, use `E2E_BASE_URL=https://angelim-forms.vercel.app npm run test:e2e`.
+Para apagar os dados de teste de vez, veja [docs/pendencias.md](docs/pendencias.md).

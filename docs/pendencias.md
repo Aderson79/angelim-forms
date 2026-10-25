@@ -21,11 +21,31 @@ Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 - [ ] Opcional: configurar o fechamento automático do formulário por data.
 
 ### Antes de divulgar
-- [ ] Na Vercel, conferir `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e fazer o deploy.
+- [x] Na Vercel, conferir `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e fazer o deploy.
 - [ ] No Supabase, desligar **Allow new users to sign up** (Authentication → Sign In / Providers).
-- [ ] Fazer uma doação de teste em produção, conferir no painel e anulá-la.
-- [ ] Testar o login no `/admin` e as telas do painel com dados reais.
+- [x] Doações de teste e todas as telas do painel validadas pelos testes automáticos (`npm run test:e2e`).
+- [ ] **Apagar os dados de teste** (veja abaixo) para a primeira doação real ser o protocolo #0001.
 - [ ] Opcional: domínio próprio (ex.: `doacoes.angelim.org`) apontando para a Vercel.
+
+#### Apagar os dados de teste
+Os testes automáticos criam doações com **"[TESTE E2E]"** no nome e as anulam no final, devolvendo o saldo.
+Elas continuam no histórico como anuladas. Para apagá-las de vez, cole no **SQL Editor** do Supabase:
+
+```sql
+-- 1. Registros de auditoria das doações de teste e das alterações feitas pelos testes
+delete from audit_log
+where donation_id in (select id from donations where name like '%[TESTE E2E]%')
+   or details::text like '%E2E%';
+
+-- 2. Doações de teste (os itens de cada doação saem junto)
+delete from donations where name like '%[TESTE E2E]%';
+
+-- 3. Opcional: recomeça a numeração do protocolo (só se não houver doações reais)
+select setval(pg_get_serial_sequence('public.donations', 'protocol'),
+              coalesce((select max(protocol) from donations), 0) + 1, false);
+```
+
+Rodar os testes de novo depois disso cria novas doações de teste. Repita a limpeza antes de divulgar.
 
 ## Ideias para depois (fora da v1)
 - Anti-spam com captcha (Cloudflare Turnstile) e limite de envios por IP.
@@ -36,4 +56,7 @@ Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 - [x] Projeto Next.js + Supabase + Vercel criado e integrado ao GitHub.
 - [x] Migrações rodando automaticamente pela integração do Supabase.
 - [x] Login de admin criado (meskytaaderson@hotmail.com).
+- [x] Acesso ao painel liberado para natalsolidario@angelim.com.
+- [x] Resumo da doação exportável: PDF, WhatsApp e mensagem copiada.
+- [x] Testes ponta a ponta (Playwright) cobrindo formulário, painel, auditoria e configurações.
 - [x] Formulário público com limites por item e painel administrativo com auditoria.

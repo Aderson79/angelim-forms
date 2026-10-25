@@ -47,7 +47,7 @@ Total: 26 itens em 4 categorias (Estrogonofe de frango, Salada, Arroz, Materiais
 
 - O formulário é público, sem login.
 - O painel `/admin` exige login por e-mail e senha (Supabase Auth). Só e-mails cadastrados na tabela `admins` veem dados.
-- Admin inicial: **meskytaaderson@hotmail.com**. Novos admins: criar o usuário no Supabase e rodar `insert into admins(email) values ('...');`.
+- Admins: **meskytaaderson@hotmail.com** e **natalsolidario@angelim.com**. Para liberar outro e-mail: criar o usuário no Supabase (Authentication → Users) e adicionar uma migração com `insert into admins(email) values ('...') on conflict do nothing;`.
 - RLS em todas as tabelas. O público só lê itens e configurações. Todas as escritas passam por funções do banco que verificam `is_admin()` e registram a ação na auditoria.
 
 ## Auditoria (escopo da v1)
@@ -69,3 +69,20 @@ A página pública segue a arte do **Natal Solidário 2025** (angelim.org), porq
 - O **painel admin** mantém o visual sóbrio (grafite e verde), sem os elementos natalinos.
 - Histórico: o hero grafite com destaque vermelho neon foi descartado; o fundo vermelho também, por lembrar identidade partidária.
 - Favicon: o círculo da árvore da logo "Igreja Angelim Teresina", só as partes brancas, com fundo e linhas vazados.
+
+## Exportar a doação
+
+Na tela de resumo, a pessoa pode guardar o que prometeu doar de três formas:
+- **Baixar PDF:** comprovante de uma página gerado no próprio aparelho (jsPDF), com a logo, o protocolo, os itens, a chave PIX, os prazos e o local.
+- **Enviar no WhatsApp:** abre o WhatsApp com o resumo pronto para mandar a si mesma ou a alguém.
+- **Copiar mensagem:** o mesmo texto, para colar onde quiser.
+
+"Imprimir" foi descartado porque funciona mal no celular.
+
+## Testes
+
+Testes ponta a ponta com Playwright (`tests/e2e`), usando o Edge instalado e o **Supabase real**:
+formulário (bloqueio sem dados/itens, limite de saldo, doação, resumo, PDF/WhatsApp/cópia, saldo atualizado),
+login, recebimento, edição, anulação/restauração, exportação CSV, limites de itens, auditoria e
+configurações refletidas na página pública. As doações de teste levam "[TESTE E2E]" no nome e são anuladas no fim;
+as configurações alteradas são restauradas.
