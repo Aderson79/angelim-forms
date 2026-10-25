@@ -15,6 +15,7 @@ const fromLocalInput = (v: string) => (v ? `${v}:00-03:00` : "");
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
     createClient()
@@ -29,15 +30,33 @@ export default function SettingsPage() {
     <>
       <PageTitle title="Configurações" />
       <LoadState loaded={!!settings} error={error} />
-      {settings && <SettingsForm key={settings.updated_at} initial={settings} onSaved={setSettings} />}
+      {settings && (
+        <SettingsForm
+          key={settings.updated_at}
+          initial={settings}
+          onSaved={setSettings}
+          msg={msg}
+          setMsg={setMsg}
+        />
+      )}
     </>
   );
 }
 
-function SettingsForm({ initial, onSaved }: { initial: Settings; onSaved: (s: Settings) => void }) {
+// A mensagem fica no componente pai: o formulário é recriado (key) ao salvar.
+function SettingsForm({
+  initial,
+  onSaved,
+  msg,
+  setMsg,
+}: {
+  initial: Settings;
+  onSaved: (s: Settings) => void;
+  msg: string | null;
+  setMsg: (m: string | null) => void;
+}) {
   const [s, setS] = useState(initial);
   const [closesAt, setClosesAt] = useState(toLocalInput(initial.closes_at));
-  const [msg, setMsg] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   const text = (key: keyof Settings, label: string) => (
@@ -53,6 +72,7 @@ function SettingsForm({ initial, onSaved }: { initial: Settings; onSaved: (s: Se
 
   async function save() {
     setPending(true);
+    setMsg(null);
     const err = await adminRpc("admin_update_settings", {
       p: {
         form_open: s.form_open,

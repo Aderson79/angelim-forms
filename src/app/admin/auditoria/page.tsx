@@ -52,6 +52,7 @@ export default function AuditPage() {
       <PageTitle title="Auditoria" />
       <div className="card mb-4 grid gap-3 p-4 sm:grid-cols-[2fr_1fr_auto] sm:items-center">
         <input
+          aria-label="Buscar na auditoria"
           className="field py-2"
           placeholder="Buscar (nome, item, responsável, motivo…)"
           value={search}

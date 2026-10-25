@@ -101,6 +101,7 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
       <td className="px-2 py-2">
         <input
           type="number"
+          aria-label={`Limite de ${it.name}`}
           min={it.committed}
           className="field w-24 py-1.5"
           value={limit}
@@ -108,10 +109,22 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
         />
       </td>
       <td className="px-2 py-2">
-        <input type="checkbox" className="h-4 w-4" checked={active} onChange={(e) => setActive(e.target.checked)} />
+        <input
+          type="checkbox"
+          aria-label={`${it.name} ativo`}
+          className="h-4 w-4"
+          checked={active}
+          onChange={(e) => setActive(e.target.checked)}
+        />
       </td>
       <td className="px-5 py-2 text-right">
-        <button type="button" className="btn-primary px-4 py-1.5 text-xs" disabled={!dirty || pending} onClick={save}>
+        <button
+          type="button"
+          aria-label={`Salvar ${it.name}`}
+          className="btn-primary px-4 py-1.5 text-xs"
+          disabled={!dirty || pending}
+          onClick={save}
+        >
           Salvar
         </button>
       </td>

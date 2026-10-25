@@ -21,6 +21,8 @@ export default function DonationsPage() {
   const [editing, setEditing] = useState<Donation | null>(null);
   const [voiding, setVoiding] = useState<Donation | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
+  // Recebimentos sendo salvos: a caixa muda na hora e fica travada até o banco confirmar.
+  const [saving, setSaving] = useState<Record<string, boolean>>({});
 
   const byId = useMemo(() => new Map(catalog.map((c) => [c.id, c])), [catalog]);
   const isDup = useMemo(() => findDuplicates(donations), [donations]);
@@ -93,22 +95,24 @@ export default function DonationsPage() {
 
       <div className="card mb-4 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.4fr_auto] lg:items-center">
         <input
+          aria-label="Buscar doações"
           className="field py-2"
           placeholder="Buscar por nome, telefone, e-mail ou protocolo"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select className="field py-2" value={status} onChange={(e) => setStatus(e.target.value as StatusFilter)}>
+        <select aria-label="Status" className="field py-2" value={status} onChange={(e) => setStatus(e.target.value as StatusFilter)}>
           <option value="ativa">Ativas</option>
           <option value="anulada">Anuladas</option>
           <option value="todas">Todas</option>
         </select>
-        <select className="field py-2" value={receipt} onChange={(e) => setReceipt(e.target.value as ReceiptFilter)}>
+        <select aria-label="Recebimento" className="field py-2" value={receipt} onChange={(e) => setReceipt(e.target.value as ReceiptFilter)}>
           <option value="todos">Qualquer recebimento</option>
           <option value="pendente">Com pendências</option>
           <option value="recebido">Tudo recebido</option>
         </select>
         <select
+          aria-label="Item"
           className="field py-2"
           value={itemId}
           onChange={(e) => setItemId(e.target.value ? Number(e.target.value) : "")}
@@ -148,13 +152,20 @@ export default function DonationsPage() {
                 donation={d}
                 byId={byId}
                 duplicate={isDup(d)}
-                onToggleReceived={(diId, received) =>
-                  run(
+                saving={saving}
+                onToggleReceived={async (diId, received) => {
+                  setSaving((s) => ({ ...s, [diId]: received }));
+                  await run(
                     "admin_set_received",
                     { p_donation_item_id: diId, p_received: received },
                     received ? "Item marcado como recebido." : "Recebimento desfeito.",
-                  )
-                }
+                  );
+                  setSaving((s) => {
+                    const next = { ...s };
+                    delete next[diId];
+                    return next;
+                  });
+                }}
                 onEdit={() => setEditing(d)}
                 onVoid={() => setVoiding(d)}
                 onRestore={() => run("admin_restore_donation", { p_id: d.id }, "Doação restaurada.")}
@@ -192,6 +203,7 @@ function DonationCard({
   donation: d,
   byId,
   duplicate,
+  saving,
   onToggleReceived,
   onEdit,
   onVoid,
@@ -200,6 +212,7 @@ function DonationCard({
   donation: Donation;
   byId: Map<number, CatalogItem>;
   duplicate: boolean;
+  saving: Record<string, boolean>;
   onToggleReceived: (donationItemId: string, received: boolean) => void;
   onEdit: () => void;
   onVoid: () => void;
@@ -270,6 +283,8 @@ function DonationCard({
       <ul className="divide-y divide-line">
         {d.donation_items.map((di) => {
           const it = byId.get(di.item_id);
+          const isSaving = di.id in saving;
+          const received = saving[di.id] ?? di.received;
           return (
             <li key={di.id} className="flex items-center justify-between gap-3 px-5 py-2 text-sm">
               <span>
@@ -278,18 +293,18 @@ function DonationCard({
               </span>
               <label
                 className={`flex cursor-pointer items-center gap-2 text-xs font-semibold ${
-                  di.received ? "text-brand-strong" : "text-muted"
+                  received ? "text-brand-strong" : "text-muted"
                 }`}
                 title={di.received_at ? `Por ${di.received_by} em ${dateTime(di.received_at)}` : undefined}
               >
                 <input
                   type="checkbox"
                   className="h-4 w-4 accent-[#3b7a52]"
-                  checked={di.received}
-                  disabled={voided}
+                  checked={received}
+                  disabled={voided || isSaving}
                   onChange={(e) => onToggleReceived(di.id, e.target.checked)}
                 />
-                {di.received ? (it?.pix_price ? "PIX confirmado" : "Recebido") : "Pendente"}
+                {isSaving ? "Salvando…" : received ? (it?.pix_price ? "PIX confirmado" : "Recebido") : "Pendente"}
               </label>
             </li>
           );

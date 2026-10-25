@@ -186,6 +186,7 @@ function EditForm({
                 </span>
                 <input
                   type="number"
+                  aria-label={`Quantidade de ${it?.name}`}
                   min={0}
                   max={max}
                   className="field w-20 py-1.5 text-center"
