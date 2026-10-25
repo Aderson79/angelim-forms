@@ -1,6 +1,6 @@
 import { DonationForm } from "@/components/donation-form";
 import type { FormData } from "@/components/info-panel";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { SiteFooter, SiteHeader, Sparkle } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
 import type { CatalogItem, Settings } from "@/lib/types";
 
@@ -67,13 +67,4 @@ async function loadFormData(): Promise<FormData> {
     supabase.from("settings").select("*").eq("id", 1).single(),
   ]);
   return catalog && settings ? { catalog: catalog as CatalogItem[], settings: settings as Settings } : null;
-}
-
-// Estrela de quatro pontas, como os brilhos da arte do Natal Solidário.
-function Sparkle({ className }: { className: string }) {
-  return (
-    <svg viewBox="0 0 40 40" aria-hidden className={`pointer-events-none ${className}`} fill="currentColor">
-      <path d="M20 0 C21.5 13 27 18.5 40 20 C27 21.5 21.5 27 20 40 C18.5 27 13 21.5 0 20 C13 18.5 18.5 13 20 0 Z" />
-    </svg>
-  );
 }

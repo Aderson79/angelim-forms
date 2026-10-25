@@ -49,3 +49,40 @@ export function SiteFooter() {
     </footer>
   );
 }
+
+// Estrela de quatro pontas, como os brilhos da arte do Natal Solidário.
+export function Sparkle({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 40 40" aria-hidden className={`pointer-events-none ${className}`} fill="currentColor">
+      <path d="M20 0 C21.5 13 27 18.5 40 20 C27 21.5 21.5 27 20 40 C18.5 27 13 21.5 0 20 C13 18.5 18.5 13 20 0 Z" />
+    </svg>
+  );
+}
+
+/** Topo do painel e do login, no estilo do Natal Solidário. */
+export function AdminTopbar({ children }: { children?: React.ReactNode }) {
+  return (
+    <header className="relative overflow-hidden border-b-2 border-ink bg-cream text-ink">
+      <Sparkle className="absolute left-[46%] top-2 hidden h-4 w-4 text-gold md:block" />
+      <Sparkle className="absolute bottom-2 left-[58%] hidden h-3 w-3 text-natal md:block" />
+      <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <Link href="/admin" prefetch={false} aria-label="Painel" className="flex min-w-0 items-center gap-4">
+          <Logo className="h-7 w-auto shrink-0 brightness-0" />
+          <span aria-hidden className="hidden h-9 w-px bg-ink/20 sm:block" />
+          <span className="relative hidden sm:block">
+            <span className="font-script text-3xl leading-none text-natal drop-shadow-[1px_2px_0_rgb(154_27_49/0.3)]">
+              Ceia de Natal
+            </span>
+            <span className="absolute -right-8 -top-2 rotate-12 rounded-sm bg-gold px-1.5 text-[10px] font-extrabold text-ink shadow-[1px_1px_0_var(--color-ink)]">
+              2026
+            </span>
+          </span>
+          <span className="ml-6 hidden -rotate-2 rounded-md border-2 border-ink bg-natal px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white shadow-[2px_2px_0_var(--color-ink)] md:inline-block">
+            Painel da equipe
+          </span>
+        </Link>
+        {children}
+      </div>
+    </header>
+  );
+}

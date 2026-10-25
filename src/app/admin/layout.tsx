@@ -1,5 +1,5 @@
 import { AdminNav, SignOutButton } from "@/components/admin/nav";
-import { SiteHeader } from "@/components/site-chrome";
+import { AdminTopbar } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
     <Suspense
       fallback={
         <>
-          <SiteHeader />
+          <AdminTopbar />
           <p className="p-8 text-center text-sm text-muted">Carregando…</p>
         </>
       }
@@ -29,12 +29,12 @@ async function AdminGate({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <SiteHeader>
-        <div className="flex items-center gap-3 text-xs">
-          <span className="hidden text-white/60 sm:inline">{email}</span>
+      <AdminTopbar>
+        <div className="flex shrink-0 items-center gap-3 text-xs">
+          <span className="hidden font-medium text-muted lg:inline">{email}</span>
           <SignOutButton />
         </div>
-      </SiteHeader>
+      </AdminTopbar>
       {isAdmin ? (
         <>
           <AdminNav />

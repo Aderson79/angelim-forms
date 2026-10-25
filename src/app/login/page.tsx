@@ -1,6 +1,6 @@
 "use client";
 
-import { SiteHeader } from "@/components/site-chrome";
+import { AdminTopbar } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,12 +28,12 @@ export default function LoginPage() {
 
   return (
     <>
-      <SiteHeader />
-      <main className="flex flex-1 items-center justify-center bg-ink px-4 pb-24 pt-8">
-        <form onSubmit={onSubmit} className="card w-full max-w-sm space-y-4 p-8">
+      <AdminTopbar />
+      <main className="flex flex-1 items-center justify-center bg-cream px-4 pb-24 pt-8">
+        <form onSubmit={onSubmit} className="card-natal w-full max-w-sm space-y-4 p-8">
           <div>
-            <p className="text-xs font-semibold tracking-[0.25em] text-muted">ÁREA RESTRITA</p>
-            <h1 className="display mt-1 text-4xl">Painel das doações</h1>
+            <p className="text-xs font-bold tracking-[0.25em] text-natal">ÁREA RESTRITA</p>
+            <h1 className="mt-1 text-3xl font-extrabold tracking-tight">Painel da <span className="font-script font-normal tracking-normal text-natal">equipe</span></h1>
           </div>
           <label className="block">
             <span className="mb-1.5 block text-sm font-semibold">E-mail</span>
@@ -58,7 +58,7 @@ export default function LoginPage() {
             />
           </label>
           {error && <p className="text-sm font-medium text-wine">{error}</p>}
-          <button type="submit" disabled={pending} className="btn-primary w-full py-3">
+          <button type="submit" disabled={pending} className="btn-natal w-full py-3">
             {pending ? "Entrando…" : "Entrar"}
           </button>
         </form>
