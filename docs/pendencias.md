@@ -28,17 +28,17 @@ Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 - [ ] Opcional: domínio próprio (ex.: `doacoes.angelim.org`) apontando para a Vercel.
 
 #### Apagar os dados de teste
-Os testes automáticos criam doações com **"[TESTE E2E]"** no nome e as anulam no final, devolvendo o saldo.
+Os testes automáticos criam doações com **"[TESTE E2E]"** no nome, e os prints do guia usam doações de exemplo com e-mail **@exemplo.com**. Todas são anuladas no final, devolvendo o saldo.
 Elas continuam no histórico como anuladas. Para apagá-las de vez, cole no **SQL Editor** do Supabase:
 
 ```sql
 -- 1. Registros de auditoria das doações de teste e das alterações feitas pelos testes
 delete from audit_log
-where donation_id in (select id from donations where name like '%[TESTE E2E]%')
+where donation_id in (select id from donations where name like '%[TESTE E2E]%' or email like '%@exemplo.com')
    or details::text like '%E2E%';
 
 -- 2. Doações de teste (os itens de cada doação saem junto)
-delete from donations where name like '%[TESTE E2E]%';
+delete from donations where name like '%[TESTE E2E]%' or email like '%@exemplo.com';
 
 -- 3. Opcional: recomeça a numeração do protocolo (só se não houver doações reais)
 select setval(pg_get_serial_sequence('public.donations', 'protocol'),
