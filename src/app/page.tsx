@@ -7,7 +7,7 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <>
-      <div className="relative overflow-hidden bg-ink text-white">
+      <div className="relative overflow-hidden bg-ink text-white print:hidden">
         <Snow />
 
         <SiteHeader className="bg-transparent">
@@ -31,7 +31,7 @@ export default function Home() {
         </section>
       </div>
 
-      <main className="relative z-10 mx-auto -mt-8 w-full max-w-3xl flex-1 px-4 pb-16">
+      <main className="relative z-10 mx-auto -mt-8 w-full max-w-3xl flex-1 px-4 pb-16 print:mt-0">
         <Suspense fallback={<FormSkeleton />}>
           <FormLoader />
         </Suspense>

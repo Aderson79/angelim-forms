@@ -35,7 +35,7 @@ export function SiteHeader({
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto bg-ink text-white/70">
+    <footer className="mt-auto bg-ink text-white/70 print:hidden">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-xs sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
           <Logo className="mb-3 h-6 w-auto opacity-90" />
