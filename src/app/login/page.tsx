@@ -4,7 +4,7 @@ import { AdminTopbar } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,6 +12,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  // O Next guarda a tela ao navegar; quando ela sai de vista (ex.: entrou no painel),
+  // limpa a senha e o "Entrando…" para o login voltar limpo depois de "Sair".
+  useEffect(
+    () => () => {
+      setPassword("");
+      setPending(false);
+      setError(null);
+    },
+    [],
+  );
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
