@@ -5,7 +5,7 @@
 ### Logo nova
 - [ ] Receber a logo nova, de preferência em **SVG** ou PNG grande (a atual tem 150×38 px e fica pouco nítida).
 - [ ] Substituir `public/logo-angelim.png`. Se mudar o nome ou a proporção, ajustar `src/components/site-chrome.tsx`.
-- [x] Favicon: só o círculo da árvore (sem o nome), PNG com fundo transparente (`src/app/favicon.ico` e `icon.png`). O `apple-icon.png` mantém fundo preto porque o iOS não aceita transparência.
+- [x] Favicon: só o círculo da árvore (sem o nome), PNG só com as partes brancas; fundo e linhas da árvore vazados (`src/app/favicon.ico` e `icon.png`). O `apple-icon.png` mantém fundo preto porque o iOS não aceita transparência.
 
 ### E-mail com cópia da doação (adiado)
 O código já existe (`src/lib/email.ts`) e fica desligado enquanto `RESEND_API_KEY` não estiver configurada. Até lá, a confirmação na tela não menciona e-mail. Para ativar:
