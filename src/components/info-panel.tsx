@@ -19,7 +19,7 @@ export function Skeleton({ w = "6rem", className = "" }: { w?: string; className
 
 function Value({ data, pick }: { data: Promise<FormData>; pick: (s: Settings) => React.ReactNode }) {
   const d = use(data);
-  return <>{d ? pick(d.settings) : "—"}</>;
+  return <span className="select-text">{d ? pick(d.settings) : "—"}</span>;
 }
 
 /** Só o valor carrega; o texto em volta aparece na hora. */
@@ -41,7 +41,7 @@ export function Live({
 
 export function ContactList({ contacts, message }: { contacts: Contact[]; message?: string }) {
   return (
-    <ul className="space-y-1.5">
+    <ul className="space-y-1.5 select-text">
       {contacts.map((c) => (
         <li key={c.phone}>
           <a
@@ -163,7 +163,7 @@ export function PixNotice({ data }: { data: Promise<FormData> }) {
         <b>Quem escolher uma das opções marcadas como PIX</b> deve realizar o pagamento para a chave abaixo e
         enviar o comprovante, identificando o nome do doador e o item doado.
       </p>
-      <p className="mt-2 inline-block rounded-lg bg-white/80 px-3 py-1.5 font-bold text-wine [overflow-wrap:anywhere]">
+      <p className="mt-2 inline-block select-text rounded-lg bg-white/80 px-3 py-1.5 font-bold text-wine [overflow-wrap:anywhere]">
         <Live data={data} pick={(s) => s.pix_key} w="16rem" />
       </p>
     </div>

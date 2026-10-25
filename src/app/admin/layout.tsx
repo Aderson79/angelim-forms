@@ -42,7 +42,7 @@ async function AdminGate({ children }: { children: React.ReactNode }) {
       {isAdmin ? (
         <>
           <AdminNav />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
+          <main className="mx-auto w-full max-w-6xl flex-1 select-text px-4 py-8">{children}</main>
         </>
       ) : (
         <main className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center px-4 py-16 text-center">

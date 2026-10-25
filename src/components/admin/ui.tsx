@@ -45,7 +45,7 @@ export function Modal({
 export function PageTitle({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-      <h1 className="display text-5xl">{title}</h1>
+      <h1 className="display select-none text-5xl">{title}</h1>
       <div className="flex flex-wrap gap-2">{children}</div>
     </div>
   );

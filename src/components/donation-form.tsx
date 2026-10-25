@@ -518,12 +518,12 @@ function Confirmation({
             <p className="text-[11px] font-bold tracking-[0.25em] text-gold print:text-natal">RESUMO DA SUA DOAÇÃO</p>
             <h2 className="font-script text-3xl leading-tight sm:text-4xl">Obrigado, {name.split(" ")[0]}!</h2>
           </div>
-          <p className="rounded-full border-2 border-white/30 bg-white/10 px-4 py-1.5 text-sm font-bold">
+          <p className="select-text rounded-full border-2 border-white/30 bg-white/10 px-4 py-1.5 text-sm font-bold">
             Protocolo {proto}
           </p>
         </header>
 
-        <p className="border-b border-line px-5 py-2.5 text-xs text-muted sm:px-6">
+        <p className="select-text border-b border-line px-5 py-2.5 text-xs text-muted sm:px-6">
           <b className="text-ink">{name}</b> · {phone} · <span className="[overflow-wrap:anywhere]">{email}</span>
         </p>
 
@@ -559,11 +559,11 @@ function Confirmation({
           </p>
         )}
 
-        <div className={`grid divide-y divide-line ${both ? "md:grid-cols-2 md:divide-x md:divide-y-0" : ""}`}>
+        <div className={`grid select-text divide-y divide-line ${both ? "md:grid-cols-2 md:divide-x md:divide-y-0" : ""}`}>
           {pix.length > 0 && (
             <section className="space-y-3 px-5 py-4 sm:px-6">
               <h3 className="flex items-baseline justify-between gap-2">
-                <span className="text-lg font-extrabold tracking-tight text-natal">Via PIX</span>
+                <span className="select-none text-lg font-extrabold tracking-tight text-natal">Via PIX</span>
                 <span className="text-sm font-semibold">
                   Total: <span className="text-base text-wine">{brl(pixTotal)}</span>
                 </span>
@@ -607,7 +607,7 @@ function Confirmation({
 
           {physical.length > 0 && (
             <section className="space-y-3 px-5 py-4 sm:px-6">
-              <h3 className="text-lg font-extrabold tracking-tight text-forest">Entrega física</h3>
+              <h3 className="select-none text-lg font-extrabold tracking-tight text-forest">Entrega física</h3>
               <SummaryList items={physical} qty={qty} />
               <dl className="grid grid-cols-2 gap-2 text-xs">
                 {(

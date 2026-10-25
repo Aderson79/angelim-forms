@@ -55,14 +55,14 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto bg-ink text-white/70 print:hidden">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-xs sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
+        <div className="space-y-1 select-text">
           <div className="mb-3">
             <LogoLink className="h-6 w-auto opacity-90" />
           </div>
           <p>Avenida dos Expedicionários, 1001 · Teresina - PI · CEP 64046-700</p>
           <p>contato@angelim.org · (86) 99517-4246</p>
         </div>
-        <p>IGREJA BATISTA ANGELIM TERESINA · CNPJ 30.740.780/0001-77</p>
+        <p className="select-text">IGREJA BATISTA ANGELIM TERESINA · CNPJ 30.740.780/0001-77</p>
       </div>
     </footer>
   );

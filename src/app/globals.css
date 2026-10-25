@@ -38,6 +38,16 @@
 body {
   background: var(--color-paper);
   color: var(--color-ink);
+  /* Textos decorativos não são selecionáveis; as informações usam a classe select-text. */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+select {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* Remove as setas dos inputs numéricos (usamos botões − / +). */
