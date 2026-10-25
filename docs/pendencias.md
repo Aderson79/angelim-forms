@@ -22,7 +22,7 @@ Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 
 ### Antes de divulgar
 - [x] Na Vercel, conferir `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e fazer o deploy.
-- [ ] No Supabase, desligar **Allow new users to sign up** (Authentication → Sign In / Providers).
+- [x] No Supabase, desligar **Allow new users to sign up** (conferido: cadastro público bloqueado).
 - [x] Doações de teste e todas as telas do painel validadas pelos testes automáticos (`npm run test:e2e`).
 - [ ] **Apagar os dados de teste** (veja abaixo) para a primeira doação real ser o protocolo #0001.
 - [ ] Opcional: domínio próprio (ex.: `doacoes.angelim.org`) apontando para a Vercel.
