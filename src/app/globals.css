@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* Identidade visual baseada em angelim.org: grafite, verde Angelim e
-   títulos condensados. O vinho entra como toque natalino. */
+/* Identidade visual: base da Angelim (grafite, verde) + página do Natal Solidário
+   (creme, vermelho natalino, vinho, verde-floresta, dourado e botões com sombra deslocada). */
 @theme {
   --color-ink: #232325;
   --color-ink-soft: #313134;
@@ -14,12 +14,21 @@
   --color-brand-soft: #e5efe8;
   --color-wine: #9b2737;
   --color-wine-soft: #f6e4e6;
-  --color-xmas-light: #e5394e; /* vermelho natalino legível sobre o grafite */
   --color-amber: #a8650c;
   --color-amber-soft: #fbf0dc;
 
+  /* Natal Solidário */
+  --color-cream: #f6f4dc;
+  --color-natal: #cf2433;
+  --color-natal-deep: #9a1b31;
+  --color-forest: #173a1f;
+  --color-gold: #f0b93a;
+  --color-sky: #e1ecf3;
+
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bebas), Impact, "Arial Narrow", sans-serif;
+  --font-script: var(--font-lobster), "Brush Script MT", cursive;
+  --font-hand: var(--font-gochi), "Comic Sans MS", cursive;
 }
 
 :root {
@@ -64,6 +73,16 @@ dialog::backdrop {
 }
 @utility btn-danger {
   @apply btn bg-wine text-white hover:brightness-110;
+}
+/* Botão e cartão "Natal Solidário": contorno grafite + sombra sólida deslocada. */
+@utility btn-natal {
+  @apply btn border-2 border-ink bg-natal font-extrabold uppercase tracking-wide text-white
+    shadow-[3px_3px_0_var(--color-ink)] hover:-translate-y-px hover:shadow-[4px_4px_0_var(--color-ink)]
+    active:translate-y-px active:shadow-[1px_1px_0_var(--color-ink)]
+    disabled:translate-y-0 disabled:border-white/30 disabled:bg-white/15 disabled:text-white/60 disabled:shadow-none;
+}
+@utility card-natal {
+  @apply rounded-2xl border-2 border-ink bg-card shadow-[5px_5px_0_var(--color-ink)];
 }
 @utility card {
   @apply rounded-2xl border border-line bg-card;

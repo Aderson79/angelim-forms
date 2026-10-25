@@ -23,9 +23,9 @@ export function ContactList({ contacts, message }: { contacts: Contact[]; messag
 
 export function InfoPanel({ settings: s }: { settings: Settings }) {
   return (
-    <section className="card overflow-hidden">
+    <section className="card-natal overflow-hidden">
       <div className="border-b border-line px-6 py-5">
-        <h2 className="display text-3xl">Informações sobre as doações</h2>
+        <h2 className="font-extrabold tracking-tight text-2xl sm:text-3xl">Informações sobre as doações</h2>
         <p className="mt-1 text-sm text-muted">
           Você pode escolher quantos itens desejar para contribuir com a nossa ceia!
         </p>

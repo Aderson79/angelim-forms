@@ -138,8 +138,8 @@ export function DonationForm({
       <InfoPanel settings={settings} />
 
       {!open && (
-        <div className="card border-amber/40 bg-amber-soft p-6 text-center">
-          <p className="display text-3xl text-amber">Doações encerradas</p>
+        <div className="card-natal bg-amber-soft p-6 text-center">
+          <p className="font-extrabold tracking-tight text-2xl text-amber">Doações encerradas</p>
           <p className="mt-1 text-sm">
             Obrigado a todos que participaram! Em caso de dúvidas, fale com nossos contatos acima.
           </p>
@@ -148,8 +148,8 @@ export function DonationForm({
 
       {open && (
         <>
-          <section className="card space-y-4 p-6">
-            <h2 className="display text-3xl">Seus dados</h2>
+          <section className="card-natal space-y-4 p-6">
+            <h2 className="font-extrabold tracking-tight text-2xl sm:text-3xl">Seus dados</h2>
             <Field label="E-mail" error={touched.email ? errors.email : null}>
               <input
                 type="email"
@@ -195,7 +195,7 @@ export function DonationForm({
 
           <section className="space-y-4">
             <div className="flex items-end justify-between gap-4 px-1">
-              <h2 className="display text-4xl">Escolha das doações</h2>
+              <h2 className="font-extrabold tracking-tight text-2xl sm:text-3xl">Escolha das <span className="font-script font-normal tracking-normal text-natal">doações</span></h2>
               <button type="button" onClick={refresh} className="btn-ghost shrink-0 px-3 py-1.5 text-xs">
                 ↻ Atualizar saldo
               </button>
@@ -203,8 +203,8 @@ export function DonationForm({
             <PixNotice settings={settings} />
 
             {groupByCategory(items).map(([category, list]) => (
-              <div key={category} className="card overflow-hidden">
-                <h3 className="border-b border-line bg-ink px-5 py-3 font-display text-2xl tracking-wide text-white">
+              <div key={category} className="card-natal overflow-hidden">
+                <h3 className="border-b-2 border-ink bg-forest px-5 py-3 text-base font-extrabold uppercase tracking-wider text-white">
                   {category}
                 </h3>
                 <ul className="divide-y divide-line">
@@ -237,7 +237,7 @@ export function DonationForm({
                 </div>
               </div>
             )}
-            <div className="flex items-center justify-between gap-4 rounded-2xl bg-ink px-5 py-4 text-white shadow-xl">
+            <div className="flex flex-col gap-3 rounded-2xl border-2 border-ink bg-forest px-5 py-4 text-white shadow-[5px_5px_0_var(--color-ink)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="min-w-0 text-sm">
                 <p className="font-semibold">
                   {totalUnits === 0
@@ -253,7 +253,7 @@ export function DonationForm({
                 type="submit"
                 disabled={pending || !valid}
                 title={valid ? undefined : `Falta preencher: ${missing.join(", ")}`}
-                className="btn-primary shrink-0 whitespace-nowrap px-6 py-3"
+                className="btn-natal w-full shrink-0 whitespace-nowrap px-6 py-3 sm:w-auto"
               >
                 {pending ? "Enviando…" : "Confirmar doação"}
               </button>
@@ -282,7 +282,7 @@ function ItemRow({ item, value, onChange }: { item: CatalogItem; value: number; 
   const pct = item.limit_qty ? Math.round((item.committed / item.limit_qty) * 100) : 100;
 
   return (
-    <li className={`flex items-center gap-4 px-5 py-4 ${soldOut ? "bg-paper/70" : ""} ${value > 0 ? "bg-brand-soft/50" : ""}`}>
+    <li className={`flex items-center gap-4 px-5 py-4 ${soldOut ? "bg-paper/70" : ""} ${value > 0 ? "bg-cream" : ""}`}>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <span className={`font-semibold ${soldOut ? "text-muted line-through" : ""}`}>{item.name}</span>
@@ -412,10 +412,10 @@ function Confirmation({
 
   return (
     <div className="space-y-6">
-      <article className="card overflow-hidden print:border-0">
-        <header className="bg-ink px-6 py-8 text-center text-white print:bg-white print:text-ink">
-          <p className="text-xs font-semibold tracking-[0.3em] text-xmas-light">RESUMO DA SUA DOAÇÃO</p>
-          <h2 className="display mt-2 text-5xl">Obrigado, {name.split(" ")[0]}!</h2>
+      <article className="card-natal overflow-hidden print:border-0 print:shadow-none">
+        <header className="border-b-2 border-ink bg-natal-deep px-6 py-8 text-center text-white print:bg-white print:text-ink">
+          <p className="text-xs font-bold tracking-[0.3em] text-gold print:text-natal">RESUMO DA SUA DOAÇÃO</p>
+          <h2 className="mt-2 font-script text-5xl sm:text-6xl">Obrigado, {name.split(" ")[0]}!</h2>
           <p className="mt-2 text-sm text-white/80 print:text-muted">
             Sua doação foi registrada. Guarde este resumo com o que você se comprometeu a doar.
           </p>
@@ -442,7 +442,7 @@ function Confirmation({
         {pix.length > 0 && (
           <section className="space-y-4 border-b border-line px-6 py-5">
             <h3 className="flex flex-wrap items-baseline justify-between gap-2">
-              <span className="display text-3xl text-wine">Via PIX</span>
+              <span className="font-extrabold tracking-tight text-2xl text-natal">Via PIX</span>
               <span className="text-sm font-semibold">
                 Total: <span className="text-lg text-wine">{brl(pixTotal)}</span>
               </span>
@@ -473,7 +473,7 @@ function Confirmation({
 
         {physical.length > 0 && (
           <section className="space-y-4 px-6 py-5">
-            <h3 className="display text-3xl text-brand-strong">Entrega física</h3>
+            <h3 className="font-extrabold tracking-tight text-2xl text-forest">Entrega física</h3>
             <SummaryList items={physical} qty={qty} />
             <InfoLines
               lines={[
@@ -497,7 +497,7 @@ function Confirmation({
       </article>
 
       <div className="flex flex-wrap justify-center gap-2 print:hidden">
-        <button type="button" onClick={() => copy(summaryText, "summary")} className="btn-primary">
+        <button type="button" onClick={() => copy(summaryText, "summary")} className="btn-natal">
           {copied === "summary" ? "Resumo copiado ✓" : "Copiar resumo"}
         </button>
         <button type="button" onClick={() => window.print()} className="btn-outline">

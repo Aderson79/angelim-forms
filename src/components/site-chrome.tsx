@@ -16,16 +16,18 @@ export function Logo({ className = "" }: { className?: string }) {
 
 export function SiteHeader({
   children,
-  className = "bg-ink",
+  className = "bg-ink text-white",
+  darkLogo = false,
 }: {
   children?: React.ReactNode;
   className?: string;
+  darkLogo?: boolean; // logo em preto, para fundos claros
 }) {
   return (
-    <header className={`relative text-white ${className}`}>
+    <header className={`relative ${className}`}>
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" aria-label="Início">
-          <Logo className="h-8 w-auto" />
+          <Logo className={`h-8 w-auto ${darkLogo ? "brightness-0" : ""}`} />
         </Link>
         {children}
       </div>

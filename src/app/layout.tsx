@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Montserrat } from "next/font/google";
+import { Bebas_Neue, Gochi_Hand, Lobster, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const bebas = Bebas_Neue({
@@ -13,6 +13,19 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
+// Letreiro "Natal" e textos manuscritos, como na página do Natal Solidário.
+const lobster = Lobster({
+  variable: "--font-lobster",
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const gochi = Gochi_Hand({
+  variable: "--font-gochi",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Doações para a Ceia de Natal 2026 | Missão Angelim",
   description:
@@ -21,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${bebas.variable} ${montserrat.variable} h-full antialiased`}>
+    <html lang="pt-BR" className={`${bebas.variable} ${montserrat.variable} ${lobster.variable} ${gochi.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );

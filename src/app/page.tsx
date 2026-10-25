@@ -7,35 +7,53 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <>
-      <div className="relative overflow-hidden bg-ink text-white print:hidden">
-        <Snow />
+      {/* Hero no estilo da página do Natal Solidário: creme, letreiro vermelho e estrelas douradas. */}
+      <div className="relative overflow-hidden bg-cream text-ink print:hidden">
+        {/* No celular ficam só as estrelas que não encostam no texto. */}
+        <Sparkle className="absolute left-[4%] top-32 h-6 w-6 text-gold sm:left-[8%] sm:top-28 sm:h-12 sm:w-12" />
+        <Sparkle className="absolute right-[10%] top-20 hidden h-9 w-9 text-natal sm:block" />
+        <Sparkle className="absolute bottom-6 right-[8%] h-7 w-7 text-gold sm:bottom-24 sm:right-[16%] sm:h-14 sm:w-14" />
+        <Sparkle className="absolute bottom-16 left-[14%] hidden h-6 w-6 text-natal/70 sm:block" />
 
-        <SiteHeader className="bg-transparent">
-          <span className="hidden text-xs font-semibold tracking-[0.2em] text-xmas-light sm:block">
-            CEIA DE NATAL 2026
-          </span>
+        <SiteHeader className="bg-transparent text-ink" darkLogo>
+          <span className="hidden text-xs font-bold tracking-[0.2em] text-natal sm:block">CEIA DE NATAL 2026</span>
         </SiteHeader>
 
-        <section className="relative mx-auto max-w-3xl px-4 pb-16 pt-6 sm:pt-10">
-          <p className="mb-4 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] text-xmas-light">
-            <span className="h-px w-8 bg-xmas-light/70" aria-hidden />
-            MISSÃO ANGELIM
+        <section className="relative mx-auto max-w-3xl px-4 pb-24 pt-4 text-center sm:pt-8">
+          <p className="text-[11px] font-bold tracking-[0.3em] text-ink/70 sm:text-xs">
+            NATAL SOLIDÁRIO · MISSÃO ANGELIM
           </p>
-          <h1 className="display text-6xl sm:text-8xl">
-            Doações para a <span className="text-xmas-light">ceia de Natal</span> 2026
+
+          <h1 className="relative mx-auto mt-4 inline-flex flex-col items-center">
+            <span className="font-script text-7xl leading-[0.9] text-natal drop-shadow-[2px_3px_0_rgb(154_27_49/0.35)] sm:text-[8.5rem]">
+              Ceia de Natal
+            </span>
+            <span className="relative -mt-1 inline-block -rotate-2 rounded-md border-2 border-ink bg-natal px-5 py-1.5 text-2xl font-extrabold tracking-[0.12em] text-white shadow-[4px_4px_0_var(--color-ink)] sm:-mt-2 sm:px-8 sm:text-4xl">
+              • DOAÇÕES •
+            </span>
+            <span className="absolute -right-3 top-2 rotate-12 rounded-sm bg-gold px-2 py-0.5 text-xs font-extrabold text-ink shadow-[2px_2px_0_var(--color-ink)] sm:-right-8 sm:top-6 sm:text-sm">
+              2026
+            </span>
           </h1>
-          <p className="mt-5 max-w-2xl text-sm font-medium italic text-white/90 sm:text-base">
-            VAMOS FAZER UMA LINDA CEIA DE NATAL PARA AS FAMÍLIAS DE LAGOA DO PIAUÍ! VOCÊ PODE FAZER PARTE
-            DISSO, ESCOLHA QUANTOS ITENS DESEJAR E VAMOS JUNTOS CELEBRAR!
+
+          <p className="mt-6 font-hand text-2xl text-ink sm:text-3xl">• Lagoa do Piauí •</p>
+
+          <p className="mx-auto mt-4 max-w-xl text-sm font-semibold leading-relaxed text-ink/80 sm:text-base">
+            Vamos fazer uma linda ceia de Natal para as famílias de Lagoa do Piauí! Você pode fazer parte
+            disso: escolha quantos itens desejar e vamos juntos celebrar!
           </p>
         </section>
       </div>
 
-      <main className="relative z-10 mx-auto -mt-8 w-full max-w-3xl flex-1 px-4 pb-16 print:mt-0">
-        <Suspense fallback={<FormSkeleton />}>
-          <FormLoader />
-        </Suspense>
-      </main>
+      {/* Faixa vinho atrás do topo do formulário, como as seções coloridas do Natal Solidário. */}
+      <div className="relative flex-1 bg-cream print:bg-white">
+        <div aria-hidden className="absolute inset-x-0 top-0 h-64 bg-natal-deep print:hidden" />
+        <main className="relative z-10 mx-auto -mt-12 w-full max-w-3xl px-4 pb-16 print:mt-0">
+          <Suspense fallback={<FormSkeleton />}>
+            <FormLoader />
+          </Suspense>
+        </main>
+      </div>
 
       <SiteFooter />
     </>
@@ -52,7 +70,7 @@ async function FormLoader() {
 
   if (!catalog || !settings) {
     return (
-      <div className="card p-8 text-center">
+      <div className="card-natal p-8 text-center">
         <p className="font-semibold">Não foi possível carregar o formulário.</p>
         <p className="mt-1 text-sm text-muted">Atualize a página em alguns instantes.</p>
       </div>
@@ -61,19 +79,12 @@ async function FormLoader() {
   return <DonationForm initialCatalog={catalog as CatalogItem[]} settings={settings as Settings} />;
 }
 
-// Neve sutil: duas camadas de pontos deslocadas.
-function Snow() {
+// Estrela de quatro pontas, como os brilhos da arte do Natal Solidário.
+function Sparkle({ className }: { className: string }) {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 opacity-60"
-      style={{
-        backgroundImage:
-          "radial-gradient(rgb(255 255 255 / 0.22) 1.5px, transparent 1.6px), radial-gradient(rgb(255 255 255 / 0.12) 1px, transparent 1.2px)",
-        backgroundSize: "46px 46px, 23px 23px",
-        backgroundPosition: "0 0, 11px 17px",
-      }}
-    />
+    <svg viewBox="0 0 40 40" aria-hidden className={`pointer-events-none ${className}`} fill="currentColor">
+      <path d="M20 0 C21.5 13 27 18.5 40 20 C27 21.5 21.5 27 20 40 C18.5 27 13 21.5 0 20 C13 18.5 18.5 13 20 0 Z" />
+    </svg>
   );
 }
 
@@ -81,7 +92,7 @@ function FormSkeleton() {
   return (
     <div className="space-y-6" aria-busy>
       {[220, 260, 420].map((h) => (
-        <div key={h} className="card animate-pulse bg-white/70" style={{ height: h }} />
+        <div key={h} className="card-natal animate-pulse bg-white/80" style={{ height: h }} />
       ))}
     </div>
   );
