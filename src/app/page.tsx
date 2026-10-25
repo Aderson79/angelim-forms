@@ -7,34 +7,31 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <>
-      <SiteHeader>
-        <span className="hidden text-xs font-semibold tracking-[0.2em] text-white/60 sm:block">
-          CEIA DE NATAL 2025
-        </span>
-      </SiteHeader>
+      <div className="relative overflow-hidden bg-ink text-white">
+        <Snow />
 
-      <section className="relative overflow-hidden bg-ink text-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand/30 blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-32 left-10 h-64 w-64 rounded-full bg-wine/30 blur-3xl"
-        />
-        <div className="relative mx-auto max-w-3xl px-4 pb-14 pt-8 sm:pt-12">
-          <p className="mb-3 text-xs font-semibold tracking-[0.3em] text-brand-soft/80">MISSÃO ANGELIM</p>
+        <SiteHeader className="bg-transparent">
+          <span className="hidden text-xs font-semibold tracking-[0.2em] text-xmas-light sm:block">
+            CEIA DE NATAL 2025
+          </span>
+        </SiteHeader>
+
+        <section className="relative mx-auto max-w-3xl px-4 pb-16 pt-6 sm:pt-10">
+          <p className="mb-4 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] text-xmas-light">
+            <span className="h-px w-8 bg-xmas-light/70" aria-hidden />
+            MISSÃO ANGELIM
+          </p>
           <h1 className="display text-6xl sm:text-8xl">
-            Doações para a <span className="text-[#7fc097]">ceia de Natal</span> 2025
+            Doações para a <span className="text-xmas-light">ceia de Natal</span> 2025
           </h1>
-          <p className="mt-5 max-w-2xl text-sm font-medium italic text-white/80 sm:text-base">
+          <p className="mt-5 max-w-2xl text-sm font-medium italic text-white/90 sm:text-base">
             VAMOS FAZER UMA LINDA CEIA DE NATAL PARA AS FAMÍLIAS DE LAGOA DO PIAUÍ! VOCÊ PODE FAZER PARTE
             DISSO, ESCOLHA QUANTOS ITENS DESEJAR E VAMOS JUNTOS CELEBRAR!
           </p>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <main className="mx-auto -mt-6 w-full max-w-3xl flex-1 px-4 pb-16">
+      <main className="relative z-10 mx-auto -mt-8 w-full max-w-3xl flex-1 px-4 pb-16">
         <Suspense fallback={<FormSkeleton />}>
           <FormLoader />
         </Suspense>
@@ -62,6 +59,22 @@ async function FormLoader() {
     );
   }
   return <DonationForm initialCatalog={catalog as CatalogItem[]} settings={settings as Settings} />;
+}
+
+// Neve sutil: duas camadas de pontos deslocadas.
+function Snow() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 opacity-60"
+      style={{
+        backgroundImage:
+          "radial-gradient(rgb(255 255 255 / 0.22) 1.5px, transparent 1.6px), radial-gradient(rgb(255 255 255 / 0.12) 1px, transparent 1.2px)",
+        backgroundSize: "46px 46px, 23px 23px",
+        backgroundPosition: "0 0, 11px 17px",
+      }}
+    />
+  );
 }
 
 function FormSkeleton() {

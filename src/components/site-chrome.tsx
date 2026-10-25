@@ -14,9 +14,15 @@ export function Logo({ className = "" }: { className?: string }) {
   );
 }
 
-export function SiteHeader({ children }: { children?: React.ReactNode }) {
+export function SiteHeader({
+  children,
+  className = "bg-ink",
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <header className="bg-ink text-white">
+    <header className={`relative text-white ${className}`}>
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" aria-label="Início">
           <Logo className="h-8 w-auto" />
