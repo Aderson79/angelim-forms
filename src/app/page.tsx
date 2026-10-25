@@ -2,14 +2,9 @@ import { DonationForm } from "@/components/donation-form";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
 import type { CatalogItem, Settings } from "@/lib/types";
+import { Suspense } from "react";
 
-export default async function Home() {
-  const supabase = await createClient();
-  const [{ data: catalog }, { data: settings }] = await Promise.all([
-    supabase.rpc("get_catalog"),
-    supabase.from("settings").select("*").eq("id", 1).single(),
-  ]);
-
+export default function Home() {
   return (
     <>
       <SiteHeader>
@@ -40,20 +35,41 @@ export default async function Home() {
       </section>
 
       <main className="mx-auto -mt-6 w-full max-w-3xl flex-1 px-4 pb-16">
-        {catalog && settings ? (
-          <DonationForm
-            initialCatalog={catalog as CatalogItem[]}
-            settings={settings as Settings}
-          />
-        ) : (
-          <div className="card p-8 text-center">
-            <p className="font-semibold">Não foi possível carregar o formulário.</p>
-            <p className="mt-1 text-sm text-muted">Atualize a página em alguns instantes.</p>
-          </div>
-        )}
+        <Suspense fallback={<FormSkeleton />}>
+          <FormLoader />
+        </Suspense>
       </main>
 
       <SiteFooter />
     </>
+  );
+}
+
+// Saldo e configurações são lidos a cada visita (nunca em cache).
+async function FormLoader() {
+  const supabase = await createClient();
+  const [{ data: catalog }, { data: settings }] = await Promise.all([
+    supabase.rpc("get_catalog"),
+    supabase.from("settings").select("*").eq("id", 1).single(),
+  ]);
+
+  if (!catalog || !settings) {
+    return (
+      <div className="card p-8 text-center">
+        <p className="font-semibold">Não foi possível carregar o formulário.</p>
+        <p className="mt-1 text-sm text-muted">Atualize a página em alguns instantes.</p>
+      </div>
+    );
+  }
+  return <DonationForm initialCatalog={catalog as CatalogItem[]} settings={settings as Settings} />;
+}
+
+function FormSkeleton() {
+  return (
+    <div className="space-y-6" aria-busy>
+      {[220, 260, 420].map((h) => (
+        <div key={h} className="card animate-pulse bg-white/70" style={{ height: h }} />
+      ))}
+    </div>
   );
 }

@@ -34,7 +34,7 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
       <div className="grid gap-px bg-line sm:grid-cols-2">
         <div className="space-y-3 bg-card px-6 py-5 text-sm">
           <h3 className="flex items-center gap-2 font-bold">
-            <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs text-brand-strong">
+            <span className="whitespace-nowrap rounded-full bg-brand-soft px-2.5 py-0.5 text-xs text-brand-strong">
               Entrega física
             </span>
             Alimentos não perecíveis

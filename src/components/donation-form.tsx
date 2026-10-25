@@ -241,7 +241,7 @@ export function DonationForm({
                 </p>
                 {pixTotal > 0 && <p className="text-white/70">PIX: {brl(pixTotal)}</p>}
               </div>
-              <button type="submit" disabled={pending} className="btn-primary px-6 py-3">
+              <button type="submit" disabled={pending} className="btn-primary shrink-0 whitespace-nowrap px-6 py-3">
                 {pending ? "Enviando…" : "Confirmar doação"}
               </button>
             </div>
@@ -280,10 +280,10 @@ function ItemRow({ item, value, onChange }: { item: CatalogItem; value: number; 
           ) : null}
         </div>
         <div className="mt-2 flex items-center gap-3">
-          <div className="h-1.5 w-24 overflow-hidden rounded-full bg-line sm:w-32" aria-hidden>
+          <div className="h-1.5 w-14 shrink-0 overflow-hidden rounded-full bg-line sm:w-32" aria-hidden>
             <div className="h-full rounded-full bg-brand" style={{ width: `${Math.min(pct, 100)}%` }} />
           </div>
-          <span className="text-xs text-muted">
+          <span className="whitespace-nowrap text-xs text-muted">
             {soldOut ? (
               <b className="text-wine">Esgotado</b>
             ) : (
