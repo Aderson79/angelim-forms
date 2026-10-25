@@ -77,15 +77,9 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
           <p className="mb-2 font-semibold">Contatos para dúvidas:</p>
           <ContactList contacts={s.contacts} />
         </div>
-        <div className="space-y-2">
-          <p className="font-bold">
-            Fique atento aos prazos e colabore para tornar nossa ceia ainda mais especial!
-          </p>
-          <p className="text-muted">
-            <b>OBS.:</b> Ao confirmar o preenchimento do formulário será enviada uma cópia para o e-mail
-            cadastrado.
-          </p>
-        </div>
+        <p className="font-bold">
+          Fique atento aos prazos e colabore para tornar nossa ceia ainda mais especial!
+        </p>
       </div>
     </section>
   );

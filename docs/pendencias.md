@@ -12,7 +12,8 @@ O código já existe (`src/lib/email.ts`) e fica desligado enquanto `RESEND_API_
 - [ ] Criar uma conta no [Resend](https://resend.com) e verificar um domínio (ex.: `angelim.org`).
 - [ ] Na Vercel, cadastrar `RESEND_API_KEY` e `RESEND_FROM` (ex.: `Missão Angelim <doacoes@angelim.org>`) e fazer um novo deploy.
 - [ ] Testar uma doação e confirmar que o e-mail chega.
-- O formulário promete "será enviada uma cópia para o e-mail cadastrado". **Se o e-mail não for ativado antes de divulgar, remover essa frase** em `src/components/info-panel.tsx`.
+- [ ] Readicionar no `InfoPanel` (`src/components/info-panel.tsx`), abaixo de "Fique atento aos prazos…", a frase que foi removida enquanto o e-mail está desligado:
+  > **OBS.:** Ao confirmar o preenchimento do formulário será enviada uma cópia para o e-mail cadastrado.
 
 ### Datas, local e horários
 - [ ] Definir as datas finais, o local e os horários de entrega e atualizá-los no painel em **Configurações** (não precisa de deploy).
