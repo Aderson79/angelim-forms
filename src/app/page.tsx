@@ -3,6 +3,7 @@ import type { FormData } from "@/components/info-panel";
 import { SiteFooter, SiteHeader, Sparkle } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
 import type { CatalogItem, Settings } from "@/lib/types";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,7 +17,17 @@ export default function Home() {
         <Sparkle className="absolute bottom-16 left-[14%] hidden h-6 w-6 text-natal/70 sm:block" />
 
         <SiteHeader className="bg-transparent text-ink" darkLogo>
-          <span className="hidden text-xs font-bold tracking-[0.2em] text-natal sm:block">CEIA DE NATAL 2026</span>
+          <div className="flex items-center gap-4">
+            <span className="hidden text-xs font-bold tracking-[0.2em] text-natal md:block">CEIA DE NATAL 2026</span>
+            {/* Leva ao painel; quem não está logado cai no login. */}
+            <Link
+              href="/admin"
+              prefetch={false}
+              className="rounded-full border-2 border-ink bg-white px-3.5 py-1.5 text-xs font-bold text-ink shadow-[2px_2px_0_var(--color-ink)] transition hover:-translate-y-px hover:bg-ink hover:text-white"
+            >
+              Área da equipe
+            </Link>
+          </div>
         </SiteHeader>
 
         <section className="relative mx-auto max-w-3xl px-4 pb-24 pt-4 text-center sm:pt-8">
