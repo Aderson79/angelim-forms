@@ -1,7 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 export async function createClient() {
+  // O cliente do Supabase usa Date.now() para checar a sessão: só pode rodar
+  // no momento da requisição, nunca no prefetch/prerender do Next.
+  await connection();
   const cookieStore = await cookies();
 
   return createServerClient(
