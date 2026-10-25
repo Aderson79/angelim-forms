@@ -37,8 +37,11 @@ Sem `RESEND_API_KEY`, o formulário funciona normalmente, só não envia e-mail.
 
 ### 4. Desenvolvimento local
 
+Crie um `.env.local` (ignorado pelo git) com as variáveis da tabela acima e rode:
+
 ```bash
-cp .env.example .env.local   # preencha as chaves
 npm install
 npm run dev
 ```
+
+Decisões do projeto e pendências estão em [docs/](docs/).
