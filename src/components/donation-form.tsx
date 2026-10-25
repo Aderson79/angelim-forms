@@ -1,7 +1,8 @@
 "use client";
 
 import { submitDonation, type SubmitResult } from "@/app/actions";
-import { brl, groupByCategory, isFormOpen, maskPhone, protocolLabel } from "@/lib/format";
+import { brl, groupByCategory, isFormOpen, maskPhone, protocolLabel, whatsappShareLink } from "@/lib/format";
+import { downloadDonationPdf, summaryMessage, type DonationSummary } from "@/lib/donation-pdf";
 import { createClient } from "@/lib/supabase/client";
 import type { CatalogItem, Settings } from "@/lib/types";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -378,36 +379,36 @@ function Confirmation({
     `Nome: ${name}\nProtocolo: ${proto}\n` +
     pix.map((it) => `• ${it.name} x${qty[it.id]} (${brl(pixValue(it))})`).join("\n");
 
-  // Versão em texto do resumo, para o doador guardar (WhatsApp, notas…).
-  const summaryText = [
-    `RESUMO DA DOAÇÃO · Ceia de Natal 2026 · Missão Angelim`,
-    `Protocolo: ${proto}`,
-    `Doador: ${name} · ${phone} · ${email}`,
-    ...(pix.length
-      ? [
-          ``,
-          `VIA PIX (total ${brl(pixTotal)})`,
-          ...pix.map((it) => `• ${qty[it.id]}x ${it.name} = ${brl(pixValue(it))}`),
-          `Chave PIX: ${s.pix_key}`,
-          `Prazo: ${s.pix_deadline}`,
-          `Enviar comprovante para: ${s.contacts.map((c) => `${c.name} ${c.phone}`).join(" / ")}`,
-        ]
-      : []),
-    ...(physical.length
-      ? [
-          ``,
-          `ENTREGA FÍSICA`,
-          ...physical.map((it) => `• ${qty[it.id]}x ${it.name}`),
-          `Data: ${s.delivery_deadline}`,
-          `Local: ${s.delivery_place}`,
-          `Horários: manhã ${s.morning_hours} · tarde ${s.afternoon_hours}`,
-        ]
-      : []),
-  ].join("\n");
+  const [createdAt] = useState(() => new Date());
+  const [pdfState, setPdfState] = useState<"idle" | "working" | "error">("idle");
+
+  const summary: DonationSummary = {
+    protocol: proto,
+    createdAt,
+    name,
+    phone,
+    email,
+    pix: pix.map((it) => ({ name: it.name, quantity: qty[it.id], value: pixValue(it) })),
+    pixTotal,
+    physical: physical.map((it) => ({ name: it.name, quantity: qty[it.id] })),
+    settings: s,
+  };
+  const message = summaryMessage(summary);
 
   function copy(text: string, what: "key" | "summary") {
-    navigator.clipboard?.writeText(text);
+    navigator.clipboard?.writeText(text).catch(() => {});
     setCopied(what);
+  }
+
+  async function savePdf() {
+    setPdfState("working");
+    try {
+      await downloadDonationPdf(summary);
+      setPdfState("idle");
+    } catch (e) {
+      console.error(e);
+      setPdfState("error");
+    }
   }
 
   return (
@@ -496,13 +497,39 @@ function Confirmation({
         )}
       </article>
 
-      <div className="flex flex-wrap justify-center gap-2 print:hidden">
-        <button type="button" onClick={() => copy(summaryText, "summary")} className="btn-natal">
-          {copied === "summary" ? "Resumo copiado ✓" : "Copiar resumo"}
-        </button>
-        <button type="button" onClick={() => window.print()} className="btn-outline">
-          Imprimir / salvar PDF
-        </button>
+      <section className="card-natal space-y-4 p-6 print:hidden" aria-labelledby="guardar">
+        <div>
+          <h3 id="guardar" className="text-xl font-extrabold tracking-tight">
+            Guarde sua doação
+          </h3>
+          <p className="mt-1 text-sm text-muted">
+            Salve o comprovante do que você prometeu doar, com a chave PIX, os prazos e o local de entrega.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <button type="button" onClick={savePdf} disabled={pdfState === "working"} className="btn-natal py-3">
+            {pdfState === "working" ? "Gerando…" : "Baixar PDF"}
+          </button>
+          <a
+            href={whatsappShareLink(message)}
+            target="_blank"
+            rel="noreferrer"
+            className="btn border-2 border-ink bg-[#25d366] py-3 font-extrabold uppercase tracking-wide text-ink shadow-[3px_3px_0_var(--color-ink)] hover:-translate-y-px"
+          >
+            Enviar no WhatsApp
+          </a>
+          <button type="button" onClick={() => copy(message, "summary")} className="btn-outline border-2 py-3">
+            {copied === "summary" ? "Mensagem copiada ✓" : "Copiar mensagem"}
+          </button>
+        </div>
+        {pdfState === "error" && (
+          <p className="text-sm font-medium text-wine">
+            Não foi possível gerar o PDF neste aparelho. Use “Copiar mensagem” ou “Enviar no WhatsApp”.
+          </p>
+        )}
+      </section>
+
+      <div className="text-center print:hidden">
         <button type="button" onClick={onRestart} className="btn-ghost">
           Fazer outra doação
         </button>

@@ -22,7 +22,10 @@ export function whatsappLink(phone: string, text?: string) {
   return `https://wa.me/${d}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 }
 
-export const brl = (n: number) =>
+/** Abre o WhatsApp com o texto pronto, para a pessoa escolher o contato (ou a si mesma). */
+export const whatsappShareLink = (text: string) => `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+export const brl =(n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export const protocolLabel = (n: number) => `#${String(n).padStart(4, "0")}`;
