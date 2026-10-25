@@ -1,6 +1,7 @@
 import { AdminNav, SignOutButton } from "@/components/admin/nav";
 import { AdminTopbar } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -32,6 +33,9 @@ async function AdminGate({ children }: { children: React.ReactNode }) {
       <AdminTopbar>
         <div className="flex shrink-0 items-center gap-3 text-xs">
           <span className="hidden font-medium text-muted lg:inline">{email}</span>
+          <Link href="/" className="hidden font-bold text-ink underline-offset-4 hover:underline sm:inline">
+            Ver formulário
+          </Link>
           <SignOutButton />
         </div>
       </AdminTopbar>

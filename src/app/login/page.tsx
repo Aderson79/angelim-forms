@@ -2,6 +2,7 @@
 
 import { AdminTopbar } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -28,7 +29,14 @@ export default function LoginPage() {
 
   return (
     <>
-      <AdminTopbar />
+      <AdminTopbar>
+        <Link
+          href="/"
+          className="shrink-0 rounded-full border-2 border-ink bg-white px-3.5 py-1.5 text-xs font-bold text-ink shadow-[2px_2px_0_var(--color-ink)] transition hover:-translate-y-px hover:bg-ink hover:text-white"
+        >
+          ← Voltar ao formulário
+        </Link>
+      </AdminTopbar>
       <main className="flex flex-1 items-center justify-center bg-cream px-4 pb-24 pt-8">
         <form onSubmit={onSubmit} className="card-natal w-full max-w-sm space-y-4 p-8">
           <div>
