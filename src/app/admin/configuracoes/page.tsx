@@ -102,7 +102,7 @@ function SettingsForm({ initial, onSaved }: { initial: Settings; onSaved: (s: Se
 
       <section className="card grid gap-4 p-6 sm:grid-cols-2">
         <h2 className="display text-3xl sm:col-span-2">Entrega física</h2>
-        {text("delivery_deadline", "Prazo (ex.: 14/12/2025)")}
+        {text("delivery_deadline", "Prazo (ex.: até 14/12/2025)")}
         {text("delivery_place", "Local")}
         {text("morning_hours", "Horário manhã")}
         {text("afternoon_hours", "Horário tarde")}

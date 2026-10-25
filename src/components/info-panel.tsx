@@ -40,9 +40,16 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
             Alimentos não perecíveis
           </h3>
           <p>
-            Até o dia <b>{s.delivery_deadline}</b>, entregues <b>pessoalmente</b> no{" "}
-            <b>📍 {s.delivery_place}</b>.
+            Devem ser entregues <b>pessoalmente</b>.
           </p>
+          <ul className="space-y-0.5">
+            <li>
+              <b>Prazo:</b> {s.delivery_deadline}
+            </li>
+            <li>
+              <b>Local:</b> 📍 {s.delivery_place}
+            </li>
+          </ul>
           <div>
             <p className="font-semibold">Horários para entrega:</p>
             <ul className="mt-1 list-disc space-y-0.5 pl-5">
@@ -62,8 +69,11 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
             Alimentos perecíveis
           </h3>
           <p>
-            Até o dia <b>{s.pix_deadline}</b>, através de <b>PIX</b>. Após realizar o pagamento, envie o
-            comprovante para os números abaixo, identificando o item doado.
+            Através de <b>PIX</b>. Após realizar o pagamento, envie o comprovante para os números abaixo,
+            identificando o item doado.
+          </p>
+          <p>
+            <b>Prazo:</b> {s.pix_deadline}
           </p>
           <p>
             <span className="font-semibold">🔑 Chave PIX:</span>{" "}

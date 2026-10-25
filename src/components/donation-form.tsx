@@ -396,8 +396,10 @@ function Confirmation({
         <section className="card space-y-4 border-wine/30 p-6">
           <h3 className="display text-3xl text-wine">Pagamento via PIX: {brl(pixTotal)}</h3>
           <p className="text-sm">
-            Faça o PIX até <b>{s.pix_deadline}</b> para a chave abaixo e envie o comprovante, identificando seu
-            nome e o item doado.
+            Faça o PIX para a chave abaixo e envie o comprovante, identificando seu nome e o item doado.
+          </p>
+          <p className="text-sm">
+            <b>Prazo:</b> {s.pix_deadline}
           </p>
           <div className="flex flex-wrap items-center gap-3 rounded-xl bg-paper px-4 py-3">
             <span className="break-all font-semibold">{s.pix_key}</span>
@@ -423,14 +425,17 @@ function Confirmation({
         <section className="card space-y-3 p-6 text-sm">
           <h3 className="display text-3xl text-brand-strong">Entrega física</h3>
           <p>
-            Entregue <b>pessoalmente</b> até <b>{s.delivery_deadline}</b> no <b>📍 {s.delivery_place}</b>.
+            Entregue <b>pessoalmente</b>.
           </p>
-          <ul className="list-disc pl-5">
+          <ul className="space-y-0.5">
             <li>
-              <b>Manhã:</b> {s.morning_hours}
+              <b>Prazo:</b> {s.delivery_deadline}
             </li>
             <li>
-              <b>Tarde:</b> {s.afternoon_hours}
+              <b>Local:</b> 📍 {s.delivery_place}
+            </li>
+            <li>
+              <b>Horários:</b> manhã {s.morning_hours} · tarde {s.afternoon_hours}
             </li>
           </ul>
           <p className="text-muted">Informe seu nome ou o protocolo {proto} na entrega.</p>

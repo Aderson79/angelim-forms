@@ -42,14 +42,16 @@ export async function sendDonationCopy(opts: {
     ${
       pix.length
         ? `<h3 style="margin-top:24px;color:#2b5c3c">Itens via PIX: ${brl(pixTotal)}</h3>
-    <p>Faça o PIX até <b>${esc(s.pix_deadline)}</b> para a chave <b>${esc(s.pix_key)}</b> e envie o comprovante,
-    identificando seu nome e o item doado, para:<br>${contacts}</p>`
+    <p>Faça o PIX para a chave <b>${esc(s.pix_key)}</b> e envie o comprovante,
+    identificando seu nome e o item doado, para:<br>${contacts}</p>
+    <p>Prazo: <b>${esc(s.pix_deadline)}</b></p>`
         : ""
     }
     ${
       physical.length
         ? `<h3 style="margin-top:24px;color:#2b5c3c">Entrega física</h3>
-    <p>Entregue pessoalmente até <b>${esc(s.delivery_deadline)}</b> no <b>${esc(s.delivery_place)}</b>.<br>
+    <p>Entregue pessoalmente.<br>
+    Prazo: <b>${esc(s.delivery_deadline)}</b><br>Local: <b>${esc(s.delivery_place)}</b><br>
     Manhã: ${esc(s.morning_hours)}<br>Tarde: ${esc(s.afternoon_hours)}</p>`
         : ""
     }
