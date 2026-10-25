@@ -1,5 +1,43 @@
+"use client";
+
 import { whatsappLink } from "@/lib/format";
-import type { Contact, Settings } from "@/lib/types";
+import type { CatalogItem, Contact, Settings } from "@/lib/types";
+import { Suspense, use } from "react";
+
+export type FormData = { catalog: CatalogItem[]; settings: Settings } | null;
+
+/** Marcador discreto no lugar de um valor que ainda está vindo do banco. */
+export function Skeleton({ w = "6rem", className = "" }: { w?: string; className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={`inline-block h-[0.9em] animate-pulse rounded bg-line align-middle ${className}`}
+      style={{ width: w }}
+    />
+  );
+}
+
+function Value({ data, pick }: { data: Promise<FormData>; pick: (s: Settings) => React.ReactNode }) {
+  const d = use(data);
+  return <>{d ? pick(d.settings) : "—"}</>;
+}
+
+/** Só o valor carrega; o texto em volta aparece na hora. */
+export function Live({
+  data,
+  pick,
+  w,
+}: {
+  data: Promise<FormData>;
+  pick: (s: Settings) => React.ReactNode;
+  w?: string;
+}) {
+  return (
+    <Suspense fallback={<Skeleton w={w} />}>
+      <Value data={data} pick={pick} />
+    </Suspense>
+  );
+}
 
 export function ContactList({ contacts, message }: { contacts: Contact[]; message?: string }) {
   return (
@@ -21,7 +59,7 @@ export function ContactList({ contacts, message }: { contacts: Contact[]; messag
   );
 }
 
-export function InfoPanel({ settings: s }: { settings: Settings }) {
+export function InfoPanel({ data }: { data: Promise<FormData> }) {
   return (
     <section className="card-natal overflow-hidden">
       <div className="border-b border-line px-6 py-5">
@@ -44,20 +82,20 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
           </p>
           <ul className="space-y-0.5">
             <li>
-              <b>Prazo:</b> {s.delivery_deadline}
+              <b>Prazo:</b> <Live data={data} pick={(s) => s.delivery_deadline} />
             </li>
             <li>
-              <b>Local:</b> 📍 {s.delivery_place}
+              <b>Local:</b> 📍 <Live data={data} pick={(s) => s.delivery_place} w="9rem" />
             </li>
           </ul>
           <div>
             <p className="font-semibold">Horários para entrega:</p>
             <ul className="mt-1 list-disc space-y-0.5 pl-5">
               <li>
-                <b>Manhã:</b> {s.morning_hours}
+                <b>Manhã:</b> <Live data={data} pick={(s) => s.morning_hours} />
               </li>
               <li>
-                <b>Tarde:</b> {s.afternoon_hours}
+                <b>Tarde:</b> <Live data={data} pick={(s) => s.afternoon_hours} />
               </li>
             </ul>
           </div>
@@ -73,11 +111,13 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
             identificando o item doado.
           </p>
           <p>
-            <b>Prazo:</b> {s.pix_deadline}
+            <b>Prazo:</b> <Live data={data} pick={(s) => s.pix_deadline} />
           </p>
           <p>
             <span className="block font-semibold">🔑 Chave PIX:</span>
-            <span className="font-medium text-brand-strong [overflow-wrap:anywhere]">{s.pix_key}</span>
+            <span className="font-medium text-brand-strong [overflow-wrap:anywhere]">
+              <Live data={data} pick={(s) => s.pix_key} w="14rem" />
+            </span>
           </p>
         </div>
       </div>
@@ -85,7 +125,17 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
       <div className="grid gap-4 border-t border-line px-6 py-5 text-sm sm:grid-cols-2">
         <div>
           <p className="mb-2 font-semibold">Contatos para dúvidas:</p>
-          <ContactList contacts={s.contacts} />
+          <Suspense
+            fallback={
+              <div className="space-y-2.5">
+                <Skeleton w="12rem" />
+                <br />
+                <Skeleton w="11rem" />
+              </div>
+            }
+          >
+            <Contacts data={data} />
+          </Suspense>
         </div>
         <p className="font-bold">
           Fique atento aos prazos e colabore para tornar nossa ceia ainda mais especial!
@@ -95,7 +145,12 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
   );
 }
 
-export function PixNotice({ settings: s }: { settings: Settings }) {
+function Contacts({ data }: { data: Promise<FormData> }) {
+  const d = use(data);
+  return d ? <ContactList contacts={d.settings.contacts} /> : <p>—</p>;
+}
+
+export function PixNotice({ data }: { data: Promise<FormData> }) {
   return (
     <div className="rounded-2xl border border-wine/25 bg-wine-soft/60 px-5 py-4 text-sm">
       <p className="font-bold text-wine">INFORMAÇÕES IMPORTANTES sobre as doações para a ceia</p>
@@ -109,7 +164,7 @@ export function PixNotice({ settings: s }: { settings: Settings }) {
         enviar o comprovante, identificando o nome do doador e o item doado.
       </p>
       <p className="mt-2 inline-block rounded-lg bg-white/80 px-3 py-1.5 font-bold text-wine [overflow-wrap:anywhere]">
-        {s.pix_key}
+        <Live data={data} pick={(s) => s.pix_key} w="16rem" />
       </p>
     </div>
   );

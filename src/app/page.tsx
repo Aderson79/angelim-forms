@@ -1,8 +1,8 @@
 import { DonationForm } from "@/components/donation-form";
+import type { FormData } from "@/components/info-panel";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { createClient } from "@/lib/supabase/server";
 import type { CatalogItem, Settings } from "@/lib/types";
-import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -49,9 +49,8 @@ export default function Home() {
       <div className="relative flex-1 bg-cream print:bg-white">
         <div aria-hidden className="absolute inset-x-0 top-0 h-64 bg-natal-deep print:hidden" />
         <main className="relative z-10 mx-auto -mt-12 w-full max-w-3xl px-4 pb-16 print:mt-0">
-          <Suspense fallback={<FormSkeleton />}>
-            <FormLoader />
-          </Suspense>
+          {/* Não espera o banco: a casca aparece na hora e só os valores carregam. */}
+          <DonationForm data={loadFormData()} />
         </main>
       </div>
 
@@ -61,22 +60,13 @@ export default function Home() {
 }
 
 // Saldo e configurações são lidos a cada visita (nunca em cache).
-async function FormLoader() {
+async function loadFormData(): Promise<FormData> {
   const supabase = await createClient();
   const [{ data: catalog }, { data: settings }] = await Promise.all([
     supabase.rpc("get_catalog"),
     supabase.from("settings").select("*").eq("id", 1).single(),
   ]);
-
-  if (!catalog || !settings) {
-    return (
-      <div className="card-natal p-8 text-center">
-        <p className="font-semibold">Não foi possível carregar o formulário.</p>
-        <p className="mt-1 text-sm text-muted">Atualize a página em alguns instantes.</p>
-      </div>
-    );
-  }
-  return <DonationForm initialCatalog={catalog as CatalogItem[]} settings={settings as Settings} />;
+  return catalog && settings ? { catalog: catalog as CatalogItem[], settings: settings as Settings } : null;
 }
 
 // Estrela de quatro pontas, como os brilhos da arte do Natal Solidário.
@@ -85,15 +75,5 @@ function Sparkle({ className }: { className: string }) {
     <svg viewBox="0 0 40 40" aria-hidden className={`pointer-events-none ${className}`} fill="currentColor">
       <path d="M20 0 C21.5 13 27 18.5 40 20 C27 21.5 21.5 27 20 40 C18.5 27 13 21.5 0 20 C13 18.5 18.5 13 20 0 Z" />
     </svg>
-  );
-}
-
-function FormSkeleton() {
-  return (
-    <div className="space-y-6" aria-busy>
-      {[220, 260, 420].map((h) => (
-        <div key={h} className="card-natal animate-pulse bg-white/80" style={{ height: h }} />
-      ))}
-    </div>
   );
 }
