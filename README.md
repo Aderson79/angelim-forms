@@ -1,4 +1,4 @@
-# Doações para a Ceia de Natal 2025 · Missão Angelim
+# Doações para a Ceia de Natal 2026 · Missão Angelim
 
 Formulário público de doações com limite por item e painel administrativo com relatório e auditoria.
 

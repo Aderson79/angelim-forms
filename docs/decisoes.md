@@ -1,6 +1,6 @@
 # Decisões do projeto
 
-Registro das decisões tomadas para o formulário de doações da Ceia de Natal 2025 (Missão Angelim) e do motivo de cada uma.
+Registro das decisões tomadas para o formulário de doações da Ceia de Natal 2026 (Missão Angelim) e do motivo de cada uma.
 
 ## Stack e infraestrutura
 

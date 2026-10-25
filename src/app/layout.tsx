@@ -14,7 +14,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Doações para a Ceia de Natal 2025 | Missão Angelim",
+  title: "Doações para a Ceia de Natal 2026 | Missão Angelim",
   description:
     "Vamos fazer uma linda ceia de Natal para as famílias de Lagoa do Piauí! Escolha os itens que deseja doar.",
 };

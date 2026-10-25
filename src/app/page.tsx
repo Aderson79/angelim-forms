@@ -12,7 +12,7 @@ export default function Home() {
 
         <SiteHeader className="bg-transparent">
           <span className="hidden text-xs font-semibold tracking-[0.2em] text-xmas-light sm:block">
-            CEIA DE NATAL 2025
+            CEIA DE NATAL 2026
           </span>
         </SiteHeader>
 
@@ -22,7 +22,7 @@ export default function Home() {
             MISSÃO ANGELIM
           </p>
           <h1 className="display text-6xl sm:text-8xl">
-            Doações para a <span className="text-xmas-light">ceia de Natal</span> 2025
+            Doações para a <span className="text-xmas-light">ceia de Natal</span> 2026
           </h1>
           <p className="mt-5 max-w-2xl text-sm font-medium italic text-white/90 sm:text-base">
             VAMOS FAZER UMA LINDA CEIA DE NATAL PARA AS FAMÍLIAS DE LAGOA DO PIAUÍ! VOCÊ PODE FAZER PARTE

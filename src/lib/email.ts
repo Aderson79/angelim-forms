@@ -33,7 +33,7 @@ export async function sendDonationCopy(opts: {
 <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:auto;color:#232325">
   <div style="background:#232325;color:#fff;padding:24px;border-radius:12px 12px 0 0">
     <div style="font-size:12px;letter-spacing:2px;opacity:.7">MISSÃO ANGELIM</div>
-    <div style="font-size:22px;font-weight:bold;margin-top:4px">Doações para a Ceia de Natal 2025</div>
+    <div style="font-size:22px;font-weight:bold;margin-top:4px">Doações para a Ceia de Natal 2026</div>
   </div>
   <div style="border:1px solid #dedbd3;border-top:0;padding:24px;border-radius:0 0 12px 12px">
     <p>Olá, <b>${esc(name)}</b>! Obrigado por fazer parte da nossa ceia. 🎄</p>
@@ -67,7 +67,7 @@ export async function sendDonationCopy(opts: {
       body: JSON.stringify({
         from: process.env.RESEND_FROM ?? "Missão Angelim <onboarding@resend.dev>",
         to: [to],
-        subject: `Sua doação para a Ceia de Natal 2025 · ${protocolLabel(protocol)}`,
+        subject: `Sua doação para a Ceia de Natal 2026 · ${protocolLabel(protocol)}`,
         html,
       }),
     });

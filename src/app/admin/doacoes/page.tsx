@@ -215,7 +215,7 @@ function DonationCard({
   const describe = (list: typeof d.donation_items) =>
     list.map((di) => `• ${byId.get(di.item_id)?.name} x${di.quantity}`).join("\n");
   const waText =
-    `Olá, ${d.name.split(" ")[0]}! Aqui é da Missão Angelim. Obrigado por participar das doações para a Ceia de Natal 2025 🎄\n` +
+    `Olá, ${d.name.split(" ")[0]}! Aqui é da Missão Angelim. Obrigado por participar das doações para a Ceia de Natal 2026 🎄\n` +
     `Protocolo ${protocolLabel(d.protocol)}:\n${describe(d.donation_items)}` +
     (pending.length && pending.length < d.donation_items.length
       ? `\n\nAinda não registramos o recebimento de:\n${describe(pending)}`

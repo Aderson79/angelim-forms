@@ -358,7 +358,7 @@ function Confirmation({
   const pixTotal = pix.reduce((t, it) => t + qty[it.id] * Number(it.pix_price), 0);
   const proto = protocolLabel(result.protocol);
   const receiptMsg =
-    `Olá! Segue o comprovante da minha doação para a Ceia de Natal 2025.\n` +
+    `Olá! Segue o comprovante da minha doação para a Ceia de Natal 2026.\n` +
     `Nome: ${name}\nProtocolo: ${proto}\n` +
     pix.map((it) => `• ${it.name} x${qty[it.id]} (${brl(qty[it.id] * Number(it.pix_price))})`).join("\n");
 
