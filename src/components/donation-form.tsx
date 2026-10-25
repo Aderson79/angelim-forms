@@ -1,12 +1,12 @@
 "use client";
 
 import { submitDonation, type SubmitResult } from "@/app/actions";
-import { brl, groupByCategory, isFormOpen, maskPhone, protocolLabel, whatsappShareLink } from "@/lib/format";
+import { brl, groupByCategory, isFormOpen, maskPhone, protocolLabel, whatsappLink, whatsappShareLink } from "@/lib/format";
 import { downloadDonationPdf, summaryMessage, type DonationSummary } from "@/lib/donation-pdf";
 import { createClient } from "@/lib/supabase/client";
 import type { CatalogItem, Settings } from "@/lib/types";
 import { Suspense, use, useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { ContactList, InfoPanel, PixNotice, Skeleton, type FormData } from "./info-panel";
+import { InfoPanel, PixNotice, Skeleton, type FormData } from "./info-panel";
 
 const REFRESH_MS = 20_000;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -128,10 +128,7 @@ export function DonationForm({ data }: { data: Promise<FormData> }) {
           refreshOnMount={restarts > 0}
           submitRef={submitRef}
           onClosed={setClosed}
-          onDone={(d) => {
-            setDone(d);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onDone={setDone}
         />
       </Suspense>
     </form>
@@ -505,123 +502,141 @@ function Confirmation({
     }
   }
 
+  // Ao aparecer, o resumo vai para o topo da tela (sem voltar ao letreiro do início).
+  const topRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const both = pix.length > 0 && physical.length > 0;
+
   return (
-    <div className="space-y-6">
+    <div ref={topRef} className="scroll-mt-4 space-y-4">
       <article className="card-natal overflow-hidden print:border-0 print:shadow-none">
-        <header className="border-b-2 border-ink bg-natal-deep px-6 py-8 text-center text-white print:bg-white print:text-ink">
-          <p className="text-xs font-bold tracking-[0.3em] text-gold print:text-natal">RESUMO DA SUA DOAÇÃO</p>
-          <h2 className="mt-2 font-script text-5xl sm:text-6xl">Obrigado, {name.split(" ")[0]}!</h2>
-          <p className="mt-2 text-sm text-white/80 print:text-muted">
-            Sua doação foi registrada. Guarde este resumo com o que você se comprometeu a doar.
-          </p>
-          <p className="mt-4 inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold print:border print:border-line">
+        <header className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b-2 border-ink bg-natal-deep px-5 py-4 text-white sm:px-6 print:bg-white print:text-ink">
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold tracking-[0.25em] text-gold print:text-natal">RESUMO DA SUA DOAÇÃO</p>
+            <h2 className="font-script text-3xl leading-tight sm:text-4xl">Obrigado, {name.split(" ")[0]}!</h2>
+          </div>
+          <p className="rounded-full border-2 border-white/30 bg-white/10 px-4 py-1.5 text-sm font-bold">
             Protocolo {proto}
           </p>
         </header>
 
-        <dl className="grid gap-x-6 gap-y-1 border-b border-line px-6 py-4 text-sm sm:grid-cols-3">
-          <div>
-            <dt className="text-xs text-muted">Doador</dt>
-            <dd className="font-semibold">{name}</dd>
-          </div>
-          <div>
-            <dt className="text-xs text-muted">Telefone</dt>
-            <dd className="font-semibold">{phone}</dd>
-          </div>
-          <div className="min-w-0">
-            <dt className="text-xs text-muted">E-mail</dt>
-            <dd className="font-semibold [overflow-wrap:anywhere]">{email}</dd>
-          </div>
-        </dl>
+        <p className="border-b border-line px-5 py-2.5 text-xs text-muted sm:px-6">
+          <b className="text-ink">{name}</b> · {phone} · <span className="[overflow-wrap:anywhere]">{email}</span>
+        </p>
 
-        {pix.length > 0 && (
-          <section className="space-y-4 border-b border-line px-6 py-5">
-            <h3 className="flex flex-wrap items-baseline justify-between gap-2">
-              <span className="font-extrabold tracking-tight text-2xl text-natal">Via PIX</span>
-              <span className="text-sm font-semibold">
-                Total: <span className="text-lg text-wine">{brl(pixTotal)}</span>
-              </span>
-            </h3>
-            <SummaryList items={pix} qty={qty} value={pixValue} />
-            <div className="rounded-xl bg-wine-soft/60 px-4 py-3">
-              <p className="text-xs font-semibold text-wine">Chave PIX para pagamento</p>
-              <div className="mt-1 flex flex-wrap items-center gap-3">
-                <span className="text-[13px] font-bold [overflow-wrap:anywhere] sm:text-base">{s.pix_key}</span>
-                <button
-                  type="button"
-                  className="btn-outline ml-auto px-4 py-1.5 text-xs print:hidden"
-                  onClick={() => copy(s.pix_key, "key")}
-                >
-                  {copied === "key" ? "Copiado ✓" : "Copiar chave"}
-                </button>
-              </div>
-            </div>
-            <InfoLines lines={[["Prazo", s.pix_deadline]]} />
-            <div className="text-sm">
-              <p className="mb-2">
-                Após pagar, envie o comprovante identificando seu nome e o item doado:
-              </p>
-              <ContactList contacts={s.contacts} message={receiptMsg} />
-            </div>
-          </section>
-        )}
-
-        {physical.length > 0 && (
-          <section className="space-y-4 px-6 py-5">
-            <h3 className="font-extrabold tracking-tight text-2xl text-forest">Entrega física</h3>
-            <SummaryList items={physical} qty={qty} />
-            <InfoLines
-              lines={[
-                ["Data", s.delivery_deadline],
-                ["Local", `📍 ${s.delivery_place}`],
-                ["Horário (manhã)", s.morning_hours],
-                ["Horário (tarde)", s.afternoon_hours],
-              ]}
-            />
-            <p className="text-sm text-muted">
-              Entregue <b>pessoalmente</b> e informe seu nome ou o protocolo {proto}.
-            </p>
-          </section>
-        )}
-
-        {result.emailSent && (
-          <p className="border-t border-line px-6 py-3 text-center text-xs text-muted">
-            Enviamos uma cópia para <b>{email}</b>.
-          </p>
-        )}
-      </article>
-
-      <section className="card-natal space-y-4 p-6 print:hidden" aria-labelledby="guardar">
-        <div>
-          <h3 id="guardar" className="text-xl font-extrabold tracking-tight">
-            Guarde sua doação
-          </h3>
-          <p className="mt-1 text-sm text-muted">
-            Salve o comprovante do que você prometeu doar, com a chave PIX, os prazos e o local de entrega.
-          </p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <button type="button" onClick={savePdf} disabled={pdfState === "working"} className="btn-natal py-3">
+        {/* Guardar: logo no topo, sem precisar rolar */}
+        <div className="grid grid-cols-3 gap-2 border-b border-line bg-cream/70 px-4 py-3 sm:px-6 print:hidden">
+          <button
+            type="button"
+            onClick={savePdf}
+            disabled={pdfState === "working"}
+            className="btn-natal px-2 py-2 text-[11px] leading-tight sm:text-xs"
+          >
             {pdfState === "working" ? "Gerando…" : "Baixar PDF"}
           </button>
           <a
             href={whatsappShareLink(message)}
             target="_blank"
             rel="noreferrer"
-            className="btn border-2 border-ink bg-[#25d366] py-3 font-extrabold uppercase tracking-wide text-ink shadow-[3px_3px_0_var(--color-ink)] hover:-translate-y-px"
+            className="btn border-2 border-ink bg-[#25d366] px-2 py-2 text-center text-[11px] font-extrabold uppercase leading-tight text-ink shadow-[3px_3px_0_var(--color-ink)] hover:-translate-y-px sm:text-xs"
           >
             Enviar no WhatsApp
           </a>
-          <button type="button" onClick={() => copy(message, "summary")} className="btn-outline border-2 py-3">
+          <button
+            type="button"
+            onClick={() => copy(message, "summary")}
+            className="btn-outline border-2 px-2 py-2 text-[11px] leading-tight sm:text-xs"
+          >
             {copied === "summary" ? "Mensagem copiada ✓" : "Copiar mensagem"}
           </button>
         </div>
         {pdfState === "error" && (
-          <p className="text-sm font-medium text-wine">
+          <p className="border-b border-line px-6 py-2 text-xs font-medium text-wine">
             Não foi possível gerar o PDF neste aparelho. Use “Copiar mensagem” ou “Enviar no WhatsApp”.
           </p>
         )}
-      </section>
+
+        <div className={`grid divide-y divide-line ${both ? "md:grid-cols-2 md:divide-x md:divide-y-0" : ""}`}>
+          {pix.length > 0 && (
+            <section className="space-y-3 px-5 py-4 sm:px-6">
+              <h3 className="flex items-baseline justify-between gap-2">
+                <span className="text-lg font-extrabold tracking-tight text-natal">Via PIX</span>
+                <span className="text-sm font-semibold">
+                  Total: <span className="text-base text-wine">{brl(pixTotal)}</span>
+                </span>
+              </h3>
+              <SummaryList items={pix} qty={qty} value={pixValue} />
+              <div className="rounded-xl bg-wine-soft/70 px-3 py-2">
+                <p className="text-[11px] font-semibold text-wine">Chave PIX</p>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[13px] font-bold [overflow-wrap:anywhere]">{s.pix_key}</span>
+                  <button
+                    type="button"
+                    className="btn-outline px-3 py-1 text-[11px] print:hidden"
+                    onClick={() => copy(s.pix_key, "key")}
+                  >
+                    {copied === "key" ? "Copiado ✓" : "Copiar chave"}
+                  </button>
+                </div>
+              </div>
+              <p className="text-sm">
+                <b>Prazo:</b> {s.pix_deadline}
+              </p>
+              <div className="text-xs">
+                <p className="mb-1.5 text-muted">Depois de pagar, envie o comprovante para:</p>
+                <div className="flex flex-wrap gap-2">
+                  {s.contacts.map((c) => (
+                    <a
+                      key={c.phone}
+                      href={whatsappLink(c.phone, receiptMsg)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1 font-semibold hover:border-brand hover:text-brand"
+                    >
+                      <span aria-hidden>📱</span>
+                      {c.name} · {c.phone}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {physical.length > 0 && (
+            <section className="space-y-3 px-5 py-4 sm:px-6">
+              <h3 className="text-lg font-extrabold tracking-tight text-forest">Entrega física</h3>
+              <SummaryList items={physical} qty={qty} />
+              <dl className="grid grid-cols-2 gap-2 text-xs">
+                {(
+                  [
+                    ["Data", s.delivery_deadline],
+                    ["Local", s.delivery_place],
+                    ["Manhã", s.morning_hours],
+                    ["Tarde", s.afternoon_hours],
+                  ] as const
+                ).map(([label, v]) => (
+                  <div key={label} className="rounded-lg bg-brand-soft/60 px-3 py-1.5">
+                    <dt className="text-[10px] font-bold uppercase tracking-wider text-brand-strong">{label}</dt>
+                    <dd className="font-semibold">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="text-xs text-muted">
+                Entregue <b>pessoalmente</b> e informe seu nome ou o protocolo {proto}.
+              </p>
+            </section>
+          )}
+        </div>
+
+        {result.emailSent && (
+          <p className="border-t border-line px-6 py-2 text-center text-xs text-muted">
+            Enviamos uma cópia para <b>{email}</b>.
+          </p>
+        )}
+      </article>
 
       <div className="text-center print:hidden">
         <button type="button" onClick={onRestart} className="btn-ghost">
@@ -642,9 +657,9 @@ function SummaryList({
   value?: (it: CatalogItem) => number;
 }) {
   return (
-    <ul className="divide-y divide-line rounded-xl border border-line text-sm">
+    <ul className="divide-y divide-line text-sm">
       {items.map((it) => (
-        <li key={it.id} className="flex items-center justify-between gap-4 px-4 py-2.5">
+        <li key={it.id} className="flex items-center justify-between gap-4 py-1.5">
           <span>
             <b>{qty[it.id]}x</b> {it.name}
           </span>
@@ -652,18 +667,5 @@ function SummaryList({
         </li>
       ))}
     </ul>
-  );
-}
-
-function InfoLines({ lines }: { lines: [string, string][] }) {
-  return (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-      {lines.map(([label, v]) => (
-        <div key={label} className="contents">
-          <dt className="font-semibold">{label}:</dt>
-          <dd>{v}</dd>
-        </div>
-      ))}
-    </dl>
   );
 }
