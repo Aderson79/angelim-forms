@@ -278,6 +278,14 @@ test.describe("painel administrativo", () => {
     expect(csv).toContain("Ligar antes da entrega (E2E)");
   });
 
+  test("sair volta ao login limpo, com o botão Entrar ativo", async ({ page }) => {
+    await login(page);
+    await page.getByRole("button", { name: "Sair" }).click();
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(page.getByRole("button", { name: "Entrar" })).toBeEnabled();
+    await expect(page.getByLabel("Senha")).toHaveValue("");
+  });
+
   test("alterar limite de item fica registrado", async ({ page }) => {
     await login(page);
     await page.goto("/admin/itens");
