@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Doações para a Ceia de Natal 2025 · Missão Angelim
 
-## Getting Started
+Formulário público de doações com limite por item e painel administrativo com relatório e auditoria.
 
-First, run the development server:
+- **Formulário (`/`)**: sem login. Mostra o saldo de cada item em tempo real e não permite passar do limite. Duas pessoas disputando o último saldo são serializadas no banco, então só uma consegue.
+- **Painel (`/admin`)**: exige login de um e-mail cadastrado na tabela `admins`.
+  - **Painel**: progresso por item (recebido, prometido e disponível), PIX esperado × confirmado e exportação consolidada.
+  - **Doações**: busca e filtros, marcar item recebido ou PIX confirmado, editar dados e quantidades, anular com motivo e restaurar, WhatsApp com mensagem pronta, alerta de possíveis duplicados e exportação para Excel (CSV).
+  - **Itens**: alterar limites, ativar/desativar e criar itens.
+  - **Configurações**: abrir/fechar o formulário (inclusive por data), prazos, local, horários, chave PIX e contatos.
+  - **Auditoria**: histórico de tudo o que foi feito, por quem e quando.
+
+Stack: Next.js 16 + Supabase (Postgres, Auth, RLS) + Vercel. O e-mail com a cópia é enviado pelo Resend (opcional).
+
+## Configuração
+
+### 1. Banco (Supabase)
+
+As migrações ficam em [supabase/migrations](supabase/migrations). Com a integração GitHub do Supabase ativa, elas rodam a cada push na `main`. Sem a integração, cole os arquivos em ordem no **SQL Editor** do Supabase. Eles são idempotentes: rodar de novo não quebra nada.
+
+### 2. Usuário administrador
+
+1. Supabase → **Authentication → Users → Add user → Create new user**: e-mail `meskytaaderson@hotmail.com`, uma senha e **Auto Confirm User** marcado.
+2. Supabase → **Authentication → Sign In / Providers**: desligue **Allow new users to sign up**. Ninguém de fora consegue criar conta.
+3. Para dar acesso a outra pessoa: crie o usuário e rode `insert into admins(email) values ('email@exemplo.com');`.
+
+### 3. Variáveis de ambiente (Vercel → Settings → Environment Variables)
+
+| Variável | Valor |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://qeskedgteaseiwwbeihg.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API Keys → *Publishable key* (ou a `anon` legada) |
+| `RESEND_API_KEY` | *(opcional)* chave do Resend para enviar a cópia por e-mail |
+| `RESEND_FROM` | *(opcional)* ex.: `Missão Angelim <doacoes@seudominio.org>`; exige domínio verificado no Resend |
+
+Sem `RESEND_API_KEY`, o formulário funciona normalmente, só não envia e-mail.
+
+### 4. Desenvolvimento local
 
 ```bash
+cp .env.example .env.local   # preencha as chaves
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
