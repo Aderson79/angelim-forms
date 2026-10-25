@@ -402,7 +402,7 @@ function Confirmation({
             <b>Prazo:</b> {s.pix_deadline}
           </p>
           <div className="flex flex-wrap items-center gap-3 rounded-xl bg-paper px-4 py-3">
-            <span className="break-all font-semibold">{s.pix_key}</span>
+            <span className="font-semibold [overflow-wrap:anywhere]">{s.pix_key}</span>
             <button
               type="button"
               className="btn-outline ml-auto px-4 py-1.5 text-xs"

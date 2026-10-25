@@ -76,8 +76,8 @@ export function InfoPanel({ settings: s }: { settings: Settings }) {
             <b>Prazo:</b> {s.pix_deadline}
           </p>
           <p>
-            <span className="font-semibold">🔑 Chave PIX:</span>{" "}
-            <span className="break-all font-medium text-brand-strong">{s.pix_key}</span>
+            <span className="block font-semibold">🔑 Chave PIX:</span>
+            <span className="font-medium text-brand-strong [overflow-wrap:anywhere]">{s.pix_key}</span>
           </p>
         </div>
       </div>
@@ -105,9 +105,11 @@ export function PixNotice({ settings: s }: { settings: Settings }) {
         fornecedor, o que nos permitirá otimizar os custos e garantir a qualidade dos itens.
       </p>
       <p className="mt-1.5">
-        <b>Quem escolher uma das opções marcadas como PIX</b> deve realizar o pagamento para a chave{" "}
-        <b className="break-all">{s.pix_key}</b> e enviar o comprovante, identificando o nome do doador e o
-        item doado.
+        <b>Quem escolher uma das opções marcadas como PIX</b> deve realizar o pagamento para a chave abaixo e
+        enviar o comprovante, identificando o nome do doador e o item doado.
+      </p>
+      <p className="mt-2 inline-block rounded-lg bg-white/80 px-3 py-1.5 font-bold text-wine [overflow-wrap:anywhere]">
+        {s.pix_key}
       </p>
     </div>
   );
