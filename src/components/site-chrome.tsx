@@ -85,14 +85,14 @@ export function AdminTopbar({ children }: { children?: React.ReactNode }) {
       <Sparkle className="absolute bottom-2 left-[58%] hidden h-3 w-3 text-natal md:block" />
       <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
-          <LogoLink className="h-7 w-auto brightness-0" />
-          <span aria-hidden className="hidden h-9 w-px bg-ink/20 sm:block" />
+          <LogoLink className="h-6 w-auto brightness-0 sm:h-7" />
+          <span aria-hidden className="h-8 w-px bg-ink/20 sm:h-9" />
           <Link href="/admin" prefetch={false} aria-label="Painel" className="flex min-w-0 items-center gap-4">
-            <span className="relative hidden sm:block">
-              <span className="font-script text-3xl leading-none text-natal drop-shadow-[1px_2px_0_rgb(154_27_49/0.3)]">
+            <span className="relative block">
+              <span className="font-script text-2xl leading-none text-natal drop-shadow-[1px_2px_0_rgb(154_27_49/0.3)] sm:text-3xl">
                 Ceia de Natal
               </span>
-              <span className="absolute -right-8 -top-2 rotate-12 rounded-sm bg-gold px-1.5 text-[10px] font-extrabold text-ink shadow-[1px_1px_0_var(--color-ink)]">
+              <span className="absolute -right-6 -top-2.5 rotate-12 rounded-sm bg-gold px-1 text-[9px] font-extrabold sm:-right-8 sm:-top-2 sm:px-1.5 sm:text-[10px] text-ink shadow-[1px_1px_0_var(--color-ink)]">
                 2026
               </span>
             </span>
