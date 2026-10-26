@@ -285,7 +285,8 @@ function DonationItems({
         </div>
       ))}
 
-      <div className="sticky bottom-3 z-10">
+      {/* Fica no fim do formulário; só flutua se o envio falhar, para o aviso ficar sempre à vista. */}
+      <div className={error ? "sticky bottom-3 z-10" : "relative"}>
         {(notice || error) && (
           <div
             role="alert"
