@@ -255,12 +255,10 @@ function DonationItems({
 
   if (!open) {
     return (
-      <div className="card-natal bg-amber-soft p-6 text-center">
-        <p className="font-extrabold tracking-tight text-2xl text-amber">Doações encerradas</p>
-        <p className="mt-1 text-sm">
-          Obrigado a todos que participaram! Em caso de dúvidas, fale com nossos contatos acima.
-        </p>
-      </div>
+      <ClosedNotice
+        // Passou da data de fechamento automático: a campanha acabou.
+        notice={settings?.form_open && settings.closes_at ? "encerrado" : (settings?.closed_notice ?? "em_breve")}
+      />
     );
   }
 
@@ -328,6 +326,28 @@ function DonationItems({
         </div>
       </div>
     </>
+  );
+}
+
+function ClosedNotice({ notice }: { notice: "em_breve" | "encerrado" }) {
+  if (notice === "encerrado") {
+    return (
+      <div className="card-natal bg-amber-soft p-6 text-center">
+        <p className="text-2xl font-extrabold tracking-tight text-amber">Doações encerradas</p>
+        <p className="mt-1 text-sm">
+          Obrigado a todos que participaram! Em caso de dúvidas, fale com nossos contatos acima.
+        </p>
+      </div>
+    );
+  }
+  return (
+    <div className="card-natal bg-white p-6 text-center">
+      <p className="font-script text-4xl text-natal">Em breve!</p>
+      <p className="mt-1 text-lg font-extrabold tracking-tight">As doações ainda não foram abertas</p>
+      <p className="mt-2 text-sm text-muted">
+        Logo você poderá escolher os itens da ceia por aqui. Em caso de dúvidas, fale com nossos contatos acima.
+      </p>
+    </div>
   );
 }
 

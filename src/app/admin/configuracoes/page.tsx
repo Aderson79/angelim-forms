@@ -76,6 +76,7 @@ function SettingsForm({
     const err = await adminRpc("admin_update_settings", {
       p: {
         form_open: s.form_open,
+        closed_notice: s.closed_notice,
         closes_at: fromLocalInput(closesAt),
         delivery_deadline: s.delivery_deadline,
         delivery_place: s.delivery_place,
@@ -106,6 +107,30 @@ function SettingsForm({
           />
           Formulário aberto para novas doações
         </label>
+        {!s.form_open && (
+          <fieldset className="space-y-2 rounded-xl bg-paper px-4 py-3 text-sm">
+            <legend className="mb-1 font-semibold">Aviso mostrado enquanto estiver fechado</legend>
+            {(
+              [
+                ["em_breve", "Doações em breve", "antes de abrir as doações"],
+                ["encerrado", "Doações encerradas", "depois que a campanha acabar"],
+              ] as const
+            ).map(([value, label, hint]) => (
+              <label key={value} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="closed_notice"
+                  className="h-4 w-4 accent-[#3b7a52]"
+                  checked={s.closed_notice === value}
+                  onChange={() => setS({ ...s, closed_notice: value })}
+                />
+                <span>
+                  <b>{label}</b> <span className="text-muted">({hint})</span>
+                </span>
+              </label>
+            ))}
+          </fieldset>
+        )}
         <label className="block min-w-0 max-w-xs">
           <span className="mb-1 block text-sm font-semibold">Fechar automaticamente em (opcional)</span>
           <input

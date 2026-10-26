@@ -15,6 +15,7 @@ export type Contact = { name: string; phone: string };
 
 export type Settings = {
   form_open: boolean;
+  closed_notice: "em_breve" | "encerrado";
   closes_at: string | null;
   delivery_deadline: string;
   delivery_place: string;
