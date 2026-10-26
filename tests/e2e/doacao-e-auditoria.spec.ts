@@ -26,6 +26,42 @@ const hasAdmin = Boolean(ADMIN_EMAIL && ADMIN_PASSWORD);
 
 const protocols: string[] = [];
 
+// Os testes precisam do formulário aberto. Abre antes e devolve ao estado em que
+// estava (ex.: fechado antes do lançamento), para os testes nunca reabrirem as doações.
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+let formWasOpen: boolean | null = null;
+
+async function adminToken() {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }),
+  });
+  return (await res.json()).access_token as string;
+}
+
+async function setFormOpen(open: boolean) {
+  const token = await adminToken();
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/admin_update_settings`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ p: { form_open: open } }),
+  });
+  if (!res.ok) throw new Error(`admin_update_settings falhou: ${res.status}`);
+}
+
+test.beforeAll(async () => {
+  test.skip(!hasAdmin, "defina E2E_ADMIN_EMAIL e E2E_ADMIN_PASSWORD no .env.local");
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?select=form_open`, { headers: { apikey: SUPABASE_KEY } });
+  formWasOpen = (await res.json())[0].form_open;
+  if (!formWasOpen) await setFormOpen(true);
+});
+
+test.afterAll(async () => {
+  if (formWasOpen === false) await setFormOpen(false);
+});
+
 // ---------------------------------------------------------------- helpers
 
 function itemRow(page: Page, name: string) {
@@ -400,7 +436,7 @@ test.describe("painel administrativo", () => {
       for (const [label, value] of Object.entries(originals)) {
         await page.getByLabel(label, { exact: true }).fill(value);
       }
-      await open().check();
+      await open().check(); // o afterAll devolve ao estado original
       await save();
     }
 
