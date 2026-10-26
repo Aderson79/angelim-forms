@@ -106,11 +106,11 @@ function SettingsForm({
           />
           Formulário aberto para novas doações
         </label>
-        <label className="block max-w-xs">
+        <label className="block min-w-0 max-w-xs">
           <span className="mb-1 block text-sm font-semibold">Fechar automaticamente em (opcional)</span>
           <input
             type="datetime-local"
-            className="field"
+            className="field min-w-0 max-w-full appearance-none"
             value={closesAt}
             onChange={(e) => setClosesAt(e.target.value)}
           />

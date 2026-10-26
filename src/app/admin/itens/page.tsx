@@ -28,33 +28,30 @@ export default function ItemsPage() {
       {loaded &&
         !error &&
         groupByCategory(catalog).map(([category, items]) => (
-          <section key={category} className="card mb-6 overflow-x-auto">
+          <section key={category} className="card mb-6 overflow-hidden">
             <h2 className="bg-ink px-5 py-3 font-display text-2xl tracking-wide text-white">{category}</h2>
-            <table className="w-full min-w-[640px] text-sm">
-              <thead className="text-left text-xs uppercase tracking-wider text-muted">
-                <tr className="border-b border-line">
-                  <th className="px-5 py-2">Item</th>
-                  <th className="px-2 py-2 text-right">Prometido</th>
-                  <th className="px-2 py-2 text-right">Recebido</th>
-                  <th className="px-2 py-2 text-right">Restante</th>
-                  <th className="px-2 py-2">Limite</th>
-                  <th className="px-2 py-2">Ativo</th>
-                  <th className="px-5 py-2" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {items.map((it) => (
-                  <ItemRow
-                    key={`${it.id}-${it.limit_qty}-${it.active}`}
-                    item={it}
-                    onSaved={async (msg) => {
-                      setFlash(msg);
-                      await reload();
-                    }}
-                  />
-                ))}
-              </tbody>
-            </table>
+            {/* Cabeçalho das colunas só no computador; no celular cada item vira um bloco. */}
+            <div className="hidden grid-cols-[1fr_5rem_5rem_5rem_7rem_4rem_6rem] gap-2 border-b border-line px-5 py-2 text-xs font-semibold uppercase tracking-wider text-muted md:grid">
+              <span>Item</span>
+              <span className="text-right">Prometido</span>
+              <span className="text-right">Recebido</span>
+              <span className="text-right">Restante</span>
+              <span>Limite</span>
+              <span>Ativo</span>
+              <span />
+            </div>
+            <ul className="divide-y divide-line">
+              {items.map((it) => (
+                <ItemRow
+                  key={`${it.id}-${it.limit_qty}-${it.active}`}
+                  item={it}
+                  onSaved={async (msg) => {
+                    setFlash(msg);
+                    await reload();
+                  }}
+                />
+              ))}
+            </ul>
           </section>
         ))}
 
@@ -86,38 +83,50 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
   }
 
   return (
-    <tr className={active ? "" : "bg-paper text-muted"}>
-      <td className="px-5 py-2 font-medium">
+    <li
+      className={`grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 px-5 py-3 text-sm md:grid-cols-[1fr_5rem_5rem_5rem_7rem_4rem_6rem] md:gap-2 ${
+        active ? "" : "bg-paper text-muted"
+      }`}
+    >
+      <div className="col-span-2 font-medium md:col-span-1">
         {it.name}
         {it.pix_price ? (
           <span className="ml-2">
             <Badge tone="wine">PIX {brl(Number(it.pix_price))}</Badge>
           </span>
         ) : null}
-      </td>
-      <td className="px-2 py-2 text-right tabular-nums">{it.committed}</td>
-      <td className="px-2 py-2 text-right tabular-nums">{it.received}</td>
-      <td className="px-2 py-2 text-right tabular-nums">{it.remaining}</td>
-      <td className="px-2 py-2">
-        <input
-          type="number"
-          aria-label={`Limite de ${it.name}`}
-          min={it.committed}
-          className="field w-24 py-1.5"
-          value={limit}
-          onChange={(e) => setLimit(Number(e.target.value) || 0)}
-        />
-      </td>
-      <td className="px-2 py-2">
-        <input
-          type="checkbox"
-          aria-label={`${it.name} ativo`}
-          className="h-4 w-4"
-          checked={active}
-          onChange={(e) => setActive(e.target.checked)}
-        />
-      </td>
-      <td className="px-5 py-2 text-right">
+      </div>
+      <p className="col-span-2 text-xs text-muted md:hidden">
+        Prometido <b className="text-ink">{it.committed}</b> · Recebido <b className="text-ink">{it.received}</b> ·
+        Restante <b className="text-ink">{it.remaining}</b>
+      </p>
+      <span className="hidden text-right tabular-nums md:block">{it.committed}</span>
+      <span className="hidden text-right tabular-nums md:block">{it.received}</span>
+      <span className="hidden text-right tabular-nums md:block">{it.remaining}</span>
+      <div className="flex items-center gap-3 md:contents">
+        <label className="flex items-center gap-2 md:block">
+          <span className="text-xs font-semibold text-muted md:hidden">Limite</span>
+          <input
+            type="number"
+            aria-label={`Limite de ${it.name}`}
+            min={it.committed}
+            className="field w-20 py-1.5 md:w-24"
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value) || 0)}
+          />
+        </label>
+        <label className="flex items-center gap-2 md:block">
+          <input
+            type="checkbox"
+            aria-label={`${it.name} ativo`}
+            className="h-4 w-4"
+            checked={active}
+            onChange={(e) => setActive(e.target.checked)}
+          />
+          <span className="text-xs font-semibold text-muted md:hidden">Ativo</span>
+        </label>
+      </div>
+      <div className="text-right">
         <button
           type="button"
           aria-label={`Salvar ${it.name}`}
@@ -127,8 +136,8 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
         >
           Salvar
         </button>
-      </td>
-    </tr>
+      </div>
+    </li>
   );
 }
 
