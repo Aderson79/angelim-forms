@@ -24,7 +24,9 @@ Hoje aparecem como "A definir" no formulário, na confirmação e no e-mail.
 - [x] Na Vercel, conferir `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e fazer o deploy.
 - [x] No Supabase, desligar **Allow new users to sign up** (conferido: cadastro público bloqueado).
 - [x] Doações de teste e todas as telas do painel validadas pelos testes automáticos (`npm run test:e2e`).
-- [ ] **Apagar os dados de teste** (veja abaixo) para a primeira doação real ser o protocolo #0001.
+- [x] **Dados de teste apagados** (migração `20261026000000_limpeza_pre_lancamento.sql`, roda uma única vez). A primeira doação real será o protocolo #0001.
+- [ ] **Formulário fechado até o lançamento.** Para abrir: painel → **Configurações** → marcar **Formulário aberto para novas doações** → Salvar.
+- [ ] Evitar rodar `npm run test:e2e` depois da limpeza: os testes criam doações "[TESTE E2E]" (anuladas no fim). Eles abrem o formulário só durante a execução e o deixam como estava.
 - [ ] Opcional: domínio próprio (ex.: `doacoes.angelim.org`) apontando para a Vercel.
 
 #### Apagar os dados de teste

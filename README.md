@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://angelim-forms.vercel.app"><img src="https://img.shields.io/badge/formul%C3%A1rio-angelim--forms.vercel.app-cf2433?style=for-the-badge&labelColor=232325" alt="Formulário"></a>
-  <a href="https://angelim-forms.vercel.app/admin"><img src="https://img.shields.io/badge/painel-%C3%A1rea%20da%20equipe-173a1f?style=for-the-badge&labelColor=232325" alt="Painel da equipe"></a>
+  <a href="https://angelim-natal.vercel.app"><img src="https://img.shields.io/badge/formul%C3%A1rio-angelim--natal.vercel.app-cf2433?style=for-the-badge&labelColor=232325" alt="Formulário"></a>
+  <a href="https://angelim-natal.vercel.app/admin"><img src="https://img.shields.io/badge/painel-%C3%A1rea%20da%20equipe-173a1f?style=for-the-badge&labelColor=232325" alt="Painel da equipe"></a>
   <a href="https://www.angelim.org"><img src="https://img.shields.io/badge/miss%C3%A3o-angelim.org-9a1b31?style=for-the-badge&labelColor=232325" alt="Missão Angelim"></a>
 </p>
 
@@ -57,7 +57,7 @@ Para guardar o compromisso há três opções: **Baixar PDF**, **Enviar no Whats
 
 ## 🌿 Frente administrativa: para a equipe
 
-Acesse pelo botão **Área da equipe** no topo do formulário ou em [`/admin`](https://angelim-forms.vercel.app/admin). Só e-mails liberados entram.
+Acesse pelo botão **Área da equipe** no topo do formulário ou em [`/admin`](https://angelim-natal.vercel.app/admin). Só e-mails liberados entram.
 
 <p align="center">
   <img src="docs/assets/painel.png" alt="Painel da equipe" width="88%">
@@ -152,7 +152,7 @@ npm run dev        # http://localhost:3000
 
 ```bash
 npm run test:e2e                                                   # build local + Supabase real
-E2E_BASE_URL=https://angelim-forms.vercel.app npm run test:e2e     # contra o site publicado
+E2E_BASE_URL=https://angelim-natal.vercel.app npm run test:e2e     # contra o site publicado
 ```
 
 Os testes usam o **Edge instalado** e o **banco real**. Eles cobrem: a doação completa, o resumo e as exportações, os limites, o login, recebimento, edição, anulação e restauração, CSV, itens, auditoria, configurações refletidas no site, o botão "Área da equipe", a logo e a seleção de texto. As doações de teste levam `[TESTE E2E]` no nome e são anuladas no final. Para apagá-las de vez antes de divulgar, use o SQL em [`docs/pendencias.md`](docs/pendencias.md).

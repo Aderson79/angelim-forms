@@ -8,7 +8,7 @@ try {
 }
 
 const PORT = 3123;
-// E2E_BASE_URL permite rodar contra o site publicado (ex.: https://angelim-forms.vercel.app).
+// E2E_BASE_URL permite rodar contra o site publicado (ex.: https://angelim-natal.vercel.app).
 const baseURL = process.env.E2E_BASE_URL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
