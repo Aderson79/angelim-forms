@@ -426,10 +426,18 @@ test.describe("painel administrativo", () => {
       // Fechar o formulário pelo painel
       await page.goto("/admin/configuracoes");
       await open().uncheck();
+      await page.getByLabel(/Doações encerradas/).check();
       await save();
       await pub.reload();
       await expect(pub.getByText("Doações encerradas")).toBeVisible();
       await expect(pub.getByRole("button", { name: "Confirmar doação" })).toHaveCount(0);
+
+      // Aviso de "ainda não abriu"
+      await page.getByLabel(/Doações em breve/).check();
+      await save();
+      await pub.reload();
+      await expect(pub.getByText("As doações ainda não foram abertas")).toBeVisible();
+      await expect(pub.getByText("Doações encerradas")).toHaveCount(0);
     } finally {
       // Restaura os valores originais e reabre o formulário
       await page.goto("/admin/configuracoes");
