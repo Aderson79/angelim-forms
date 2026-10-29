@@ -10,6 +10,8 @@ export default function ItemsPage() {
   const { catalog, loaded, error, reload } = useAdminData();
   const [flash, setFlash] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState<CatalogItem | null>(null);
+  const categories = [...new Set(catalog.map((c) => c.category))];
 
   return (
     <>
@@ -45,6 +47,7 @@ export default function ItemsPage() {
                 <ItemRow
                   key={`${it.id}-${it.limit_qty}-${it.active}`}
                   item={it}
+                  onEdit={() => setEditing(it)}
                   onSaved={async (msg) => {
                     setFlash(msg);
                     await reload();
@@ -55,9 +58,9 @@ export default function ItemsPage() {
           </section>
         ))}
 
-      <NewItemDialog
+      <ItemDialog
         open={creating}
-        categories={[...new Set(catalog.map((c) => c.category))]}
+        categories={categories}
         onClose={() => setCreating(false)}
         onDone={async () => {
           setCreating(false);
@@ -65,11 +68,33 @@ export default function ItemsPage() {
           await reload();
         }}
       />
+      {editing && (
+        <ItemDialog
+          key={editing.id}
+          open
+          item={editing}
+          categories={categories}
+          onClose={() => setEditing(null)}
+          onDone={async () => {
+            setEditing(null);
+            setFlash("Item corrigido.");
+            await reload();
+          }}
+        />
+      )}
     </>
   );
 }
 
-function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: string) => void }) {
+function ItemRow({
+  item: it,
+  onEdit,
+  onSaved,
+}: {
+  item: CatalogItem;
+  onEdit: () => void;
+  onSaved: (msg: string) => void;
+}) {
   const [limit, setLimit] = useState(it.limit_qty);
   const [active, setActive] = useState(it.active);
   const [pending, setPending] = useState(false);
@@ -95,6 +120,14 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
             <Badge tone="wine">PIX {brl(Number(it.pix_price))}</Badge>
           </span>
         ) : null}
+        <button
+          type="button"
+          aria-label={`Editar ${it.name}`}
+          className="ml-2 text-xs font-semibold text-muted underline hover:text-ink"
+          onClick={onEdit}
+        >
+          Editar
+        </button>
       </div>
       <p className="col-span-2 text-xs text-muted md:hidden">
         Prometido <b className="text-ink">{it.committed}</b> · Recebido <b className="text-ink">{it.received}</b> ·
@@ -141,35 +174,43 @@ function ItemRow({ item: it, onSaved }: { item: CatalogItem; onSaved: (msg: stri
   );
 }
 
-function NewItemDialog({
+/** Cria um item novo ou, com `item`, corrige categoria, nome e valor PIX de um existente. */
+function ItemDialog({
   open,
+  item,
   categories,
   onClose,
   onDone,
 }: {
   open: boolean;
+  item?: CatalogItem;
   categories: string[];
   onClose: () => void;
   onDone: () => void;
 }) {
-  const [form, setForm] = useState({ category: "", name: "", limit: 1, pix: "" });
+  const empty = item
+    ? { category: item.category, name: item.name, limit: item.limit_qty, pix: item.pix_price ? String(item.pix_price).replace(".", ",") : "" }
+    : { category: "", name: "", limit: 1, pix: "" };
+  const [form, setForm] = useState(empty);
   const [error, setError] = useState<string | null>(null);
 
   async function save() {
-    const err = await adminRpc("admin_create_item", {
+    const fields = {
       p_category: form.category,
       p_name: form.name,
-      p_limit: form.limit,
       p_pix_price: form.pix ? Number(form.pix.replace(",", ".")) : null,
-    });
+    };
+    const err = item
+      ? await adminRpc("admin_edit_item", { p_id: item.id, ...fields })
+      : await adminRpc("admin_create_item", { ...fields, p_limit: form.limit });
     if (err) return setError(err);
-    setForm({ category: "", name: "", limit: 1, pix: "" });
+    setForm(empty);
     setError(null);
     onDone();
   }
 
   return (
-    <Modal open={open} title="Novo item" onClose={onClose}>
+    <Modal open={open} title={item ? "Editar item" : "Novo item"} onClose={onClose}>
       <div className="space-y-3 text-sm">
         <label className="block">
           <span className="mb-1 block font-semibold">Categoria</span>
@@ -190,16 +231,19 @@ function NewItemDialog({
           <input className="field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </label>
         <div className="grid grid-cols-2 gap-3">
-          <label className="block">
-            <span className="mb-1 block font-semibold">Limite</span>
-            <input
-              type="number"
-              min={0}
-              className="field"
-              value={form.limit}
-              onChange={(e) => setForm({ ...form, limit: Number(e.target.value) || 0 })}
-            />
-          </label>
+          {/* Na edição o limite continua na própria linha, que valida contra o já prometido. */}
+          {!item && (
+            <label className="block">
+              <span className="mb-1 block font-semibold">Limite</span>
+              <input
+                type="number"
+                min={0}
+                className="field"
+                value={form.limit}
+                onChange={(e) => setForm({ ...form, limit: Number(e.target.value) || 0 })}
+              />
+            </label>
+          )}
           <label className="block">
             <span className="mb-1 block font-semibold">Valor PIX (vazio = entrega física)</span>
             <input
@@ -217,7 +261,7 @@ function NewItemDialog({
             Cancelar
           </button>
           <button type="button" className="btn-primary" onClick={save}>
-            Criar item
+            {item ? "Salvar correção" : "Criar item"}
           </button>
         </div>
       </div>

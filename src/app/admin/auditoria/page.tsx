@@ -16,6 +16,7 @@ const ACTIONS: Record<string, { label: string; tone: "neutral" | "green" | "wine
   dados_editados: { label: "Dados editados", tone: "amber" },
   item_alterado: { label: "Item alterado", tone: "neutral" },
   item_criado: { label: "Item criado", tone: "neutral" },
+  item_editado: { label: "Item corrigido", tone: "amber" },
   configuracoes_alteradas: { label: "Configurações", tone: "neutral" },
 };
 
@@ -118,7 +119,8 @@ function Details({ action, details: d }: { action: string; details: Record<strin
         return `${d.item}: limite ${d.limite_de} → ${d.limite_para}${d.ativo_de !== d.ativo_para ? ` · ${d.ativo_para ? "ativado" : "desativado"}` : ""}`;
       case "item_criado":
         return `${d.item} (${d.categoria}) · limite ${d.limite}`;
-      case "dados_editados": {
+      case "dados_editados":
+      case "item_editado": {
         const antes = d.antes as Record<string, unknown>;
         const depois = d.depois as Record<string, unknown>;
         return Object.keys(depois)

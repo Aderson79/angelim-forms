@@ -368,6 +368,25 @@ test.describe("painel administrativo", () => {
     await expect(limit).toHaveValue(original);
   });
 
+  test("corrigir nome de item fica registrado", async ({ page }) => {
+    await login(page);
+    await page.goto("/admin/itens");
+    const item = "Touca descartável 1 caixa";
+    const fixed = `${item} E2E`;
+    const nameField = page.getByLabel("Nome (com a unidade, ex.: “Feijão 1kg”)");
+
+    await page.getByRole("button", { name: `Editar ${item}` }).click();
+    await nameField.fill(fixed);
+    await page.getByRole("button", { name: "Salvar correção" }).click();
+    await expect(page.getByText("Item corrigido.")).toBeVisible();
+
+    // volta ao nome original
+    await page.getByRole("button", { name: `Editar ${fixed}` }).click();
+    await nameField.fill(item);
+    await page.getByRole("button", { name: "Salvar correção" }).click();
+    await expect(page.getByRole("button", { name: `Editar ${item}` })).toBeVisible();
+  });
+
   test("a auditoria mostra todas as ações", async ({ page }) => {
     await login(page);
     await page.goto("/admin/auditoria");
